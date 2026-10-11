@@ -1,0 +1,47 @@
+---
+import Badge from "./Badge.astro";
+import { carta } from "../data/carta";
+
+const { cover, services } = carta;
+---
+
+<section
+  id="carta"
+  class="bg-brand-light px-5 py-12"
+  aria-labelledby="carta-title"
+>
+  <div class="mx-auto flex w-full max-w-lg flex-col gap-10">
+    <header class="flex flex-col items-center gap-4 text-center text-theme-black">
+      <p class="kicker">{cover.subtitle}</p>
+      <h2 id="carta-title" class="font-display text-4xl leading-tight md:text-5xl">
+        {cover.title}
+      </h2>
+      <div class="flex items-center gap-1.5" aria-hidden="true">
+        {Array.from({ length: 7 }).map(() => (
+          <span class="size-1.5 rounded-[1px] bg-accent" />
+        ))}
+      </div>
+      <p class="text-base italic leading-6 text-theme-black/80">{cover.slogan}</p>
+    </header>
+
+    <div class="flex flex-col gap-6">
+      {
+        services.map((service) => (
+          <article class="rounded-bl-[32px] rounded-tr-[32px] bg-theme-white p-6">
+            <div class="flex flex-col gap-4 text-theme-black">
+              <div class="flex flex-wrap gap-2">
+                <Badge label={service.price} />
+                <Badge label={service.duration} />
+              </div>
+              <h3 class="text-2xl font-semibold leading-8">{service.title}</h3>
+              {service.lead && (
+                <p class="kicker text-accent">{service.lead}</p>
+              )}
+              <p class="text-base font-normal leading-6">{service.description}</p>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>

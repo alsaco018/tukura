@@ -1,0 +1,37 @@
+---
+import { carta } from "../data/carta";
+
+const { intro, maintenanceNote } = carta;
+---
+
+<section
+  id="carta-inicio"
+  class="bg-accent px-5 py-12 text-theme-white"
+  aria-labelledby="carta-intro-title"
+>
+  <div class="mx-auto flex w-full max-w-lg flex-col gap-8">
+    <p class="text-sm font-normal leading-5 text-theme-white/90">
+      {maintenanceNote}
+    </p>
+
+    <div class="flex flex-col gap-5">
+      <p class="kicker text-theme-white">{intro.kicker}</p>
+      <h2 id="carta-intro-title" class="text-4xl font-semibold leading-[44px]">
+        {intro.greeting}
+      </h2>
+      {
+        intro.body.map((paragraph) => (
+          <p class="text-base font-normal leading-6">{paragraph}</p>
+        ))
+      }
+    </div>
+
+    <blockquote class="border-l-2 border-theme-white pl-6">
+      <p class="text-lg italic leading-[26px]">{intro.quote}</p>
+    </blockquote>
+
+    <ul class="flex flex-col gap-2 text-base font-semibold leading-6" role="list">
+      {intro.principles.map((item) => <li>{item}</li>)}
+    </ul>
+  </div>
+</section>

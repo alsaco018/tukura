@@ -1,0 +1,77 @@
+---
+import Button from "./Button.astro";
+import { site } from "../data/site";
+
+interface Props {
+  showScrollHint?: boolean;
+  scrollHref?: string;
+  ctaHref?: string;
+  ctaLabel?: string;
+  tagline?: string;
+  displayWord?: string;
+}
+
+const {
+  showScrollHint = true,
+  scrollHref = "#servicios",
+  ctaHref = site.cta.href,
+  ctaLabel = site.cta.label,
+  tagline = site.tagline,
+  displayWord = site.displayWord,
+} = Astro.props;
+---
+
+<section
+  class="relative flex min-h-[100dvh] w-full flex-col items-center overflow-hidden rounded-b-[120px] md:rounded-b-[200px]"
+  aria-label="Inicio"
+>
+  <img
+    src="/images/hero.png"
+    alt=""
+    class="absolute inset-0 h-full w-full object-cover"
+    width="1200"
+    height="1600"
+  />
+  <div class="absolute inset-0 bg-theme-black/25" aria-hidden="true"></div>
+
+  <div class="relative z-10 flex w-full max-w-lg flex-1 flex-col items-center px-5 pb-16 pt-28 md:pt-36">
+    <img
+      src="/icons/logo.svg"
+      alt="TUKURA"
+      width="106"
+      height="64"
+      class="mb-auto h-16 w-auto"
+    />
+
+    <div class="mt-auto flex w-full flex-col items-center gap-16 text-center text-theme-white">
+      <div class="flex flex-col items-center gap-2">
+        <p class="max-w-[18ch] text-lg font-normal leading-[26px] md:max-w-none">
+          {tagline}
+        </p>
+        <h1 class="font-display text-[72px] leading-[1.1] md:text-[96px] md:leading-[130px]">
+          {displayWord}
+        </h1>
+      </div>
+
+      <Button href={ctaHref} label={ctaLabel} variant="secondary" />
+    </div>
+
+    {
+      showScrollHint && (
+        <a
+          href={scrollHref}
+          class="mt-10 inline-flex size-6 items-center justify-center"
+          aria-label="Ver más contenido"
+        >
+          <img
+            src="/icons/arrow-down.svg"
+            alt=""
+            width="24"
+            height="24"
+            class="size-6 animate-bounce-arrow"
+          />
+        </a>
+      )
+    }
+  </div>
+</section>

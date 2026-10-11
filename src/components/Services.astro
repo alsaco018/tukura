@@ -1,0 +1,23 @@
+---
+import ServiceCard from "./ServiceCard.astro";
+import { services } from "../data/services";
+---
+
+<section
+  id="servicios"
+  class="bg-brand-light px-5 py-10"
+  aria-labelledby="servicios-title"
+>
+  <div class="mx-auto flex w-full max-w-lg flex-col gap-6">
+    <header class="flex flex-col gap-5 text-theme-black">
+      <p class="kicker">Nuestros servicios</p>
+      <h2 id="servicios-title" class="text-4xl font-semibold leading-[44px]">
+        Dedícate un momento
+      </h2>
+    </header>
+
+    <div class="flex flex-col items-center gap-5">
+      {services.map((service) => <ServiceCard service={service} />)}
+    </div>
+  </div>
+</section>

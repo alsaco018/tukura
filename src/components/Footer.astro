@@ -1,0 +1,66 @@
+---
+import { site } from "../data/site";
+
+interface Props {
+  simplified?: boolean;
+}
+
+const { simplified = false } = Astro.props;
+---
+
+<footer class="bg-theme-black text-theme-white">
+  <div class="mx-auto flex w-full max-w-lg flex-col gap-10 px-5 py-8">
+    {
+      !simplified && (
+        <div class="flex flex-col gap-6">
+          <p class="kicker">Explora</p>
+          <nav aria-label="Pie de página" class="grid grid-cols-2 gap-6">
+            {site.nav.map((item) => (
+              <a
+                href={item.href}
+                class="text-base font-normal leading-6 transition-opacity hover:opacity-80"
+              >
+                {item.label}
+              </a>
+            ))}
+          </nav>
+        </div>
+      )
+    }
+
+    <div class="flex flex-col gap-2.5">
+      <p class="kicker">sígueme</p>
+      <ul class="flex gap-6" role="list">
+        {
+          site.social.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                class="inline-flex size-11 items-center justify-center rounded-full bg-accent transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-lighter"
+                aria-label={item.label}
+                target={item.href.startsWith("http") ? "_blank" : undefined}
+                rel={item.href.startsWith("http") ? "noopener noreferrer" : undefined}
+              >
+                <img src={item.icon} alt="" width="24" height="24" class="size-6" />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+
+  <div class="border-t border-accent px-5 py-2.5">
+    <div
+      class="mx-auto flex max-w-lg flex-wrap items-center justify-center gap-6 text-base font-semibold leading-7"
+    >
+      {
+        site.legal.map((item) => (
+          <a href={item.href} class="py-2.5 transition-opacity hover:opacity-80">
+            {item.label}
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</footer>

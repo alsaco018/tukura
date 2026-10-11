@@ -1,0 +1,133 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Poppins";
+  src: url("/fonts/Poppins-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url("/fonts/Poppins-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url("/fonts/Poppins-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url("/fonts/Poppins-Italic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TAN Paradiso";
+  src:
+    url("/fonts/TAN-PARADISO-Regular.woff2") format("woff2"),
+    url("/fonts/TAN-PARADISO-Regular.otf") format("opentype"),
+    url("/fonts/TAN-PARADISO-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "TAN Paradiso", ui-serif, Georgia, serif;
+
+  --color-brand-default: #e4d3c6;
+  --color-brand-medium: #f2e9e1;
+  --color-brand-light: #fbf4ef;
+  --color-brand-lighter: #fdf9f7;
+
+  --color-theme-black: #4d3114;
+  --color-theme-white: #ffffff;
+
+  --color-accent: #c26d82;
+  --color-accent-medium: #e198aa;
+  --color-accent-light: #ffc2d1;
+  --color-accent-lighter: #ffe0e8;
+
+  --color-accent-2: #2b82a7;
+  --color-accent-2-medium: #72b2cd;
+  --color-accent-2-light: #bae2f3;
+  --color-accent-2-lighter: #dcf0f9;
+
+  --color-neutral-medium: #f2ebe2;
+  --color-neutral-light: #f9f5f1;
+}
+
+:root {
+  color: var(--color-theme-black);
+  background-color: var(--color-brand-light);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  font-family: var(--font-sans);
+  background-color: var(--color-brand-light);
+  color: var(--color-theme-black);
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.kicker {
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+@keyframes bounce-arrow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+.animate-bounce-arrow {
+  animation: bounce-arrow 1.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-bounce-arrow {
+    animation: none;
+  }
+}

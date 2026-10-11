@@ -1,0 +1,50 @@
+---
+import Badge from "./Badge.astro";
+import { site } from "../data/site";
+
+const { gift } = site;
+---
+
+<section
+  id="regalo"
+  class="bg-theme-white px-5 py-10"
+  aria-labelledby="regalo-title"
+>
+  <div class="mx-auto flex w-full max-w-lg flex-col gap-6">
+    <div class="flex flex-col gap-5 text-theme-black">
+      <p class="kicker">{gift.kicker}</p>
+      <h2 id="regalo-title" class="text-4xl font-semibold leading-[44px]">
+        {gift.title}
+      </h2>
+      <p class="text-base font-normal leading-6">{gift.intro}</p>
+    </div>
+
+    <div class="flex flex-wrap gap-x-6 gap-y-3">
+      {gift.badges.map((label) => <Badge label={label} />)}
+    </div>
+
+    <div class="flex flex-col gap-5">
+      {
+        gift.options.map((option) => (
+          <article class="overflow-hidden rounded-bl-[40px] rounded-tr-[40px] bg-brand-light p-6">
+            <div class="flex flex-col gap-6">
+              {option.badges.length > 0 && (
+                <div class="flex flex-wrap gap-2">
+                  {option.badges.map((label) => (
+                    <Badge label={label} />
+                  ))}
+                </div>
+              )}
+              <div class="flex flex-col gap-4 text-theme-black">
+                <h3 class="text-2xl font-semibold leading-8">{option.title}</h3>
+                <p class="text-base font-normal leading-6">{option.description}</p>
+              </div>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+
+    <p class="text-sm font-normal leading-5 text-theme-black">{gift.note}</p>
+  </div>
+</section>

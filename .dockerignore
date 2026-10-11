@@ -1,0 +1,15 @@
+node_modules
+dist
+.astro
+.git
+.github
+.cursor
+*.md
+.env
+.env.*
+.DS_Store
+.idea
+npm-debug.log*
+.gitignore
+.dockerignore
+docker-compose.yml

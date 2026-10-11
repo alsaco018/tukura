@@ -1,0 +1,59 @@
+---
+import Button from "./Button.astro";
+import { carta } from "../data/carta";
+import { site } from "../data/site";
+
+const { contact } = carta;
+---
+
+<section
+  id="contacto"
+  class="bg-theme-black px-5 py-14 text-theme-white"
+  aria-labelledby="contacto-title"
+>
+  <div class="mx-auto flex w-full max-w-lg flex-col items-start gap-8">
+    <div class="flex flex-col gap-5">
+      <p class="kicker text-theme-white">{contact.kicker}</p>
+      <h2 id="contacto-title" class="text-4xl font-semibold leading-[44px]">
+        Reserva tu momento
+      </h2>
+      <p class="text-base font-normal leading-6 text-theme-white/90">
+        Escríbenos por WhatsApp y te acompañamos a elegir la sesión que mejor se adapte a ti.
+      </p>
+    </div>
+
+    <ul class="flex w-full flex-col gap-4 text-base leading-6" role="list">
+      <li>
+        <a
+          href={contact.phoneHref}
+          class="font-semibold transition-opacity hover:opacity-80"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {contact.phoneDisplay}
+        </a>
+      </li>
+      <li class="text-theme-white/90">{contact.address}</li>
+      <li>
+        <a
+          href={contact.instagram.href}
+          class="transition-opacity hover:opacity-80"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {contact.instagram.handle}
+        </a>
+      </li>
+    </ul>
+
+    <Button
+      href={site.contact.whatsapp}
+      label="Pide cita por WhatsApp"
+      variant="secondary"
+    />
+
+    <p class="font-display text-3xl leading-tight text-accent-light md:text-4xl">
+      {contact.closing}
+    </p>
+  </div>
+</section>

@@ -1,0 +1,26 @@
+---
+import { SpaceGallery } from "./SpaceGallery";
+import { site } from "../data/site";
+
+const { space } = site;
+---
+
+<section
+  id="espacio"
+  class="bg-brand-light px-5 py-10"
+  aria-labelledby="espacio-title"
+>
+  <div class="mx-auto flex w-full max-w-lg flex-col gap-6">
+    <div class="flex flex-col gap-5 text-theme-black">
+      <p class="kicker">{space.kicker}</p>
+      <h2 id="espacio-title" class="text-4xl font-semibold leading-[44px]">
+        {space.title}
+      </h2>
+      <div class="flex flex-col gap-4 text-base font-normal leading-6">
+        {space.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+      </div>
+    </div>
+
+    <SpaceGallery client:load images={space.images} />
+  </div>
+</section>

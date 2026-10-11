@@ -1,0 +1,36 @@
+---
+import { site } from "../data/site";
+
+const { about } = site;
+---
+
+<section
+  id="quien-soy"
+  class="bg-accent pt-10 text-theme-white"
+  aria-labelledby="quien-soy-title"
+>
+  <div class="mx-auto flex w-full max-w-lg flex-col gap-6 px-5">
+    <div class="flex flex-col gap-5">
+      <p class="kicker">{about.kicker}</p>
+      <h2 id="quien-soy-title" class="text-4xl font-semibold leading-[44px]">
+        {about.name}
+      </h2>
+      <p class="text-base font-normal leading-6">{about.body}</p>
+    </div>
+
+    <blockquote class="border-l-2 border-theme-white pl-6">
+      <p class="text-lg italic leading-[26px]">{about.quote}</p>
+    </blockquote>
+  </div>
+
+  <div class="mt-6 h-[353px] w-full overflow-hidden">
+    <img
+      src={about.image}
+      alt="Ambiente de bienestar con luz suave"
+      class="h-full w-full object-cover"
+      width="786"
+      height="706"
+      loading="lazy"
+    />
+  </div>
+</section>

@@ -1,0 +1,17 @@
+# Joins the portfolio Docker network so the shared Caddy can reverse-proxy this app.
+# First deploy: ensure /opt/portfolio is up (creates network portfolio_web), then:
+#   cd /opt/tukura && docker compose up -d --build
+services:
+  tukura:
+    build: .
+    container_name: tukura
+    restart: unless-stopped
+    expose:
+      - "80"
+    networks:
+      - web
+
+networks:
+  web:
+    external: true
+    name: portfolio_web

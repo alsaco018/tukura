@@ -1,0 +1,21 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/Hero.astro";
+import Services from "../components/Services.astro";
+import About from "../components/About.astro";
+import Space from "../components/Space.astro";
+import Gift from "../components/Gift.astro";
+import Footer from "../components/Footer.astro";
+import { site } from "../data/site";
+---
+
+<BaseLayout title={`${site.name} — Masajes y bienestar`} description={site.description}>
+  <main id="main-content">
+    <Hero />
+    <Services />
+    <About />
+    <Space />
+    <Gift />
+  </main>
+  <Footer />
+</BaseLayout>
