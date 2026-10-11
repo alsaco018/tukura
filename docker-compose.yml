@@ -14,4 +14,4 @@ services:
 networks:
   web:
     external: true
-    name: portfolio_web
+    name: albertosaldana-portfolio
