@@ -2,12 +2,12 @@
 
 Sitio web de TUKURA masajes (Astro + React + Tailwind CSS 4).
 
-**Dominios:** [tukura.es](https://tukura.es) · `tu-kura.com` redirige a `tukura.es`
+**Dominios:** [tukura.es](https://tukura.es) · `tu-kura.com` → `tukura.es`
 
 ## Páginas
 
-- `/` — Portada de mantenimiento (página pública actual)
-- `/inicio` — Homepage completa (diseño Figma, en desarrollo)
+- `/` — Portada de mantenimiento (página pública)
+- `/inicio` — Homepage completa (en desarrollo)
 
 ## Desarrollo local
 
@@ -16,57 +16,61 @@ npm install
 npm run dev
 ```
 
-- Pública: `http://localhost:4322/`
-- Home en desarrollo: `http://localhost:4322/inicio`
+- `http://localhost:4322/`
+- `http://localhost:4322/inicio`
 
-## Deploy (Hostinger VPS, mismo que el portfolio)
+## Deploy (Hostinger VPS + Nginx del host)
 
-Comparte la red Docker `portfolio_web` y el Caddy del portfolio (puertos 80/443).
+Arquitectura:
 
-### 1. DNS (Hostinger)
+```text
+Internet → Nginx (80/443) → 127.0.0.1:8082 → contenedor tukura:80
+                         → 127.0.0.1:8081 → contenedor portfolio:80
+```
 
-Apunta a la IP del VPS:
-
-| Tipo | Nombre | Valor |
-|------|--------|--------|
-| A | `@` y `www` en **tukura.es** | IP del VPS |
-| A | `@` y `www` en **tu-kura.com** | IP del VPS |
-
-### 2. Primera vez en el VPS
+### 1. Contenedor Tukura
 
 ```bash
-# Caddy del portfolio debe estar corriendo (con el Caddyfile actualizado)
-cd /opt/portfolio && docker compose up -d
-
-git clone <url-repo-tukura> /opt/tukura
+git clone https://github.com/alsaco018/tukura.git /opt/tukura
 cd /opt/tukura
 docker compose up -d --build
 ```
 
-### 3. GitHub Actions
+Comprueba: `curl -I http://127.0.0.1:8082`
 
-Secrets del repo (iguales que el portfolio):
+### 2. Nginx
 
-- `VPS_HOST`
-- `VPS_USER`
-- `VPS_SSH_KEY`
-- `VPS_PORT` (opcional)
-
-Cada push a `main` hace deploy en `/opt/tukura`.
-
-### 4. Tras cambiar el Caddyfile del portfolio
-
-Hay que redesplegar el portfolio una vez para que Caddy cargue `tukura.es` y la redirección de `tu-kura.com`:
+Plantilla en [`deploy/nginx-tukura.es.conf`](deploy/nginx-tukura.es.conf):
 
 ```bash
-cd /opt/portfolio
-git pull   # o el workflow Deploy del portfolio
-docker compose up -d
+sudo cp deploy/nginx-tukura.es.conf /etc/nginx/sites-available/tukura.es
+sudo ln -sf /etc/nginx/sites-available/tukura.es /etc/nginx/sites-enabled/
+sudo nginx -t && sudo systemctl reload nginx
+sudo certbot --nginx -d tukura.es -d www.tukura.es
 ```
+
+Para `tu-kura.com`, tras el certificado de tukura.es puedes pedir también:
+
+```bash
+sudo certbot --nginx -d tu-kura.com -d www.tu-kura.com
+```
+
+(o mantener solo la redirección HTTP del archivo de ejemplo).
+
+### 3. Portfolio (mismo VPS)
+
+El compose del portfolio publica `127.0.0.1:8081:80`. En el bloque HTTPS de `albertosaldana.dev` usa:
+
+```nginx
+proxy_pass http://127.0.0.1:8081;
+```
+
+### 4. GitHub Actions
+
+Secrets: `VPS_HOST`, `VPS_USER`, `VPS_SSH_KEY`, `VPS_PORT` (opcional).  
+Deploy path: `/opt/tukura`.
 
 ## Contenido editable
 
-- `src/data/site.ts` — textos, CTA, redes
-- `src/data/services.ts` — servicios
-- `src/data/carta.ts` — carta de masajes
+- `src/data/site.ts`, `services.ts`, `carta.ts`
 - `public/fonts/` — Poppins y Tan-paradiso
