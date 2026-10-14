@@ -5,34 +5,58 @@ export const site = {
   description:
     "Centro de masajes y bienestar. Un espacio seguro y amable para bajar el ritmo y recibir cuidado.",
   cta: {
-    label: "Pide cita",
-    href: "https://wa.me/34641984714",
+    label: "Reserva",
+    href: "/inicio#contacto",
   },
   contact: {
     email: "info@tukura.es",
+    phone: "641 984 714",
+    phoneHref: "tel:+34641984714",
     whatsapp: "https://wa.me/34641984714",
+    instagram: {
+      label: "@tukura_bienestar",
+      href: "https://instagram.com/tukura_bienestar",
+    },
+    address: "C/ Madre de Dios, n° 7. Centro Apófisis.",
+    mapImage: "/images/contact-map.png",
+    kicker: "contacta con nosotros",
+    title: "Pide cita y regálate una pausa",
   },
   social: [
     {
-      label: "Instagram",
-      href: "https://instagram.com/tukura_bienestar",
-      icon: "/icons/social-2.svg",
-    },
-    {
       label: "WhatsApp",
       href: "https://wa.me/34641984714",
-      icon: "/icons/social-1.svg",
+      icon: "/icons/whatsapp-white.svg",
+    },
+    {
+      label: "Instagram",
+      href: "https://instagram.com/tukura_bienestar",
+      icon: "/icons/instagram-white.svg",
+    },
+    {
+      label: "Email",
+      href: "mailto:info@tukura.es",
+      icon: "/icons/email-white.svg",
     },
   ],
   nav: [
-    { label: "Servicios", href: "#servicios" },
-    { label: "Quien soy", href: "#quien-soy" },
-    { label: "El espacio", href: "#espacio" },
-    { label: "Tarjeta regalo", href: "#regalo" },
+    { label: "Nuestros servicios", href: "/inicio#servicios" },
+    { label: "Quién soy", href: "/historia" },
+    { label: "Nuestra historia", href: "/historia" },
+    { label: "El espacio", href: "/inicio#espacio" },
+    { label: "Tarjeta regalo", href: "/inicio#regalo" },
+    { label: "Contacta con nosotros", href: "/inicio#contacto" },
+  ],
+  footerNav: [
+    { label: "Servicios", href: "/inicio#servicios" },
+    { label: "Quién soy", href: "/historia" },
+    { label: "Nuestra historia", href: "/historia" },
+    { label: "El espacio", href: "/inicio#espacio" },
+    { label: "Tarjeta regalo", href: "/inicio#regalo" },
   ],
   legal: [
     { label: "Privacidad", href: "#" },
-    { label: "Contacto", href: "https://wa.me/34641984714" },
+    { label: "Aviso legal", href: "#" },
     { label: "Cookies", href: "#" },
   ],
   address: "C/ Madre de Dios, n° 7. Centro Apófisis.",
@@ -49,12 +73,28 @@ export const site = {
     quote: "“Tu cuerpo también cuenta tu historia”",
     image: "/images/about.jpg",
   },
+  story: {
+    kicker: "nuestra historia",
+    lines: [
+      { accent: "Acompañar", rest: " sin imponer" },
+      { accent: "Cuidar", rest: " sin invadir" },
+      { accent: "Sostener", rest: " sin juzgar" },
+    ],
+    paragraphs: [
+      "Tu cuerpo guarda el estrés diario.",
+      "En TUKURA creamos espacios seguros para bajar el ritmo y recibir cuidado.",
+      "Mediante masajes integrales y tacto consciente, acompañamos a tu cuerpo a aflojar, respirar y recuperar su bienestar.",
+    ],
+    ctaLabel: "Leer más",
+    ctaHref: "/historia",
+    decoration: "/images/story-decoration.svg",
+  },
   space: {
     kicker: "el espacio",
     title: "Un lugar donde relajarte",
     paragraphs: [
-      "El ritmo diario, el estrés y el cansancio se reflejan en el cuerpo: hombros tensos, mandíbula apretada o fatiga. De esa necesidad de pausa nace TUKURA, un espacio seguro y amable para bajar el ritmo y recibir cuidado sin tener que resolverlo todo.",
-      "Entendemos el masaje desde una mirada integral, viendo el cuerpo como un todo. Mediante el tacto consciente y la escucha, acompañamos a tu cuerpo a aflojar, respirar y recuperar su bienestar.",
+      "El ritmo diario, el estrés y el cansancio se reflejan en el cuerpo: hombros tensos, mandíbula apretada o fatiga. De esa necesidad de pausa nace TUKURA, un espacio seguro y amable para bajar el ritmo y recibir cuidado sin tener que resolverlo todo",
+      "Entendemos el masaje desde una mirada integral, viendo el cuerpo como un todo. Mediante el tacto consciente y la escucha, acompañamos a tu cuerpo a aflojar, respirar y recuperar su bienestar",
     ],
     images: [
       "/images/space-1.png",
@@ -65,21 +105,26 @@ export const site = {
   gift: {
     kicker: "Tarjeta regalo",
     title: "Regala bienestar",
-    intro:
-      "Un regalo que cuida. Elige una experiencia o deja que la persona elija.",
-    badges: ["Digital", "Email", "Whatsapp", "Recoger en el centro"],
-    options: [
+    intro: "Un regalo que cuida. Elige una experiencia o deja que la persona elija",
+    badges: ["Digital", "Recoger en el centro"],
+    slides: [
       {
+        kicker: "Elije tu regalo",
         title: "Regala un masaje",
-        description: "Elije tu regalo",
-        badges: ["60 min"],
+        description:
+          "Regala bienestar, elige el quiromasaje relajante perfecto para sorprender a quien tú quieras",
+        ctaLabel: "Reserva",
+        image: "/images/gift-slider.png",
       },
       {
-        title: "Elije el importe",
-        description: "Válida para cualquier servicio",
-        badges: [],
+        kicker: "Elije el importe",
+        title: "Tarjeta a tu medida",
+        description:
+          "Válida para cualquier servicio. Tú eliges el importe y la persona decide su momento de bienestar",
+        ctaLabel: "Reserva",
+        image: "/images/gift-slider.png",
       },
     ],
-    note: "Las tarjetas regalo digitales se envían por email o WhatsApp, listas para regalar. También puedes recogerlas impresas en el centro. Válidas durante 6 meses.",
+    note: "Las tarjetas regalo digitales se envían por email o WhatsApp, listas para regalar. También puedes recogerlas impresas en el centro. Válidas durante 6 meses",
   },
 } as const;

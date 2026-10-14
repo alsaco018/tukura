@@ -6,6 +6,7 @@ interface Props {
 }
 
 const { simplified = false } = Astro.props;
+const footerLinks = site.footerNav;
 ---
 
 <footer class="bg-theme-black text-theme-white">
@@ -15,7 +16,7 @@ const { simplified = false } = Astro.props;
         <div class="flex flex-col gap-6">
           <p class="kicker">Explora</p>
           <nav aria-label="Pie de página" class="grid grid-cols-2 gap-6">
-            {site.nav.map((item) => (
+            {footerLinks.map((item) => (
               <a
                 href={item.href}
                 class="text-base font-normal leading-6 transition-opacity hover:opacity-80"

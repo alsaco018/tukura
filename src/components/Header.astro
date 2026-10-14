@@ -1,0 +1,11 @@
+---
+import { MobileNav } from "./MobileNav";
+import { site } from "../data/site";
+---
+
+<MobileNav
+  client:load
+  nav={site.nav}
+  ctaLabel={site.cta.label}
+  ctaHref={site.cta.href}
+/>

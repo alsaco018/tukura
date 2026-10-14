@@ -1,0 +1,110 @@
+---
+import { BookingForm } from "./BookingForm";
+import ScrollReveal from "./ScrollReveal";
+import { site } from "../data/site";
+
+const { contact } = site;
+---
+
+<section
+  id="contacto"
+  class="bg-accent-lighter"
+  aria-labelledby="contacto-title"
+>
+  <div
+    class="relative h-60 w-full overflow-hidden rounded-b-[999px]"
+    data-scroll-fade
+    data-scroll-fade-y="40"
+  >
+    <img
+      src="/images/booking-hero.jpg"
+      alt=""
+      class="absolute inset-0 h-full w-full object-cover object-[center_35%]"
+      width="540"
+      height="722"
+    />
+    <div class="absolute inset-0 bg-theme-black/15" aria-hidden="true"></div>
+    <img
+      src="/icons/form/turtle-white.svg"
+      alt=""
+      width="106"
+      height="64"
+      class="absolute left-1/2 top-1/2 h-16 w-auto -translate-x-1/2 -translate-y-1/2"
+    />
+  </div>
+
+  <div class="mx-auto flex w-full max-w-lg flex-col items-center gap-10 px-5 py-10">
+    <header class="flex w-full flex-col gap-5 text-theme-black">
+      <p class="kicker" data-scroll-fade>contacto</p>
+      <ScrollReveal
+        client:visible
+        as="h2"
+        id="contacto-title"
+        text={contact.title}
+        textClassName="text-5xl font-semibold leading-[1.15] md:text-6xl"
+      />
+    </header>
+
+    <div class="w-full" data-scroll-fade data-scroll-fade-y="36">
+      <BookingForm client:load />
+    </div>
+
+    <ul class="flex w-full flex-col gap-3" role="list" data-scroll-fade>
+      <li>
+        <a
+          href={contact.whatsapp}
+          class="inline-flex items-center gap-2 text-base font-normal leading-6 text-theme-black transition-opacity hover:opacity-80"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            src="/icons/whatsapp.svg"
+            alt=""
+            width="24"
+            height="24"
+            class="size-6"
+          />
+          {contact.phone}
+        </a>
+      </li>
+      <li>
+        <a
+          href={contact.instagram.href}
+          class="inline-flex items-center gap-2 text-base font-normal leading-6 text-theme-black transition-opacity hover:opacity-80"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            src="/icons/instagram.svg"
+            alt=""
+            width="24"
+            height="24"
+            class="size-6"
+          />
+          {contact.instagram.label}
+        </a>
+      </li>
+      <li class="inline-flex items-center gap-2 text-base font-normal leading-6">
+        <img
+          src="/icons/map-pin.svg"
+          alt=""
+          width="24"
+          height="24"
+          class="size-6 shrink-0"
+        />
+        <span>{contact.address}</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="h-[295px] w-full overflow-hidden" data-scroll-fade data-scroll-fade-y="48">
+    <img
+      src={contact.mapImage}
+      alt={`Mapa de ubicación: ${contact.address}`}
+      class="h-full w-full object-cover"
+      width="786"
+      height="590"
+      loading="lazy"
+    />
+  </div>
+</section>

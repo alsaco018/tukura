@@ -76,6 +76,7 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -129,5 +130,30 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .animate-bounce-arrow {
     animation: none;
+  }
+}
+
+/* Word split for scroll-linked reveal (opacity/blur driven by GSAP scrub) */
+.scroll-reveal__word {
+  display: inline-block;
+  opacity: 0.28;
+  filter: blur(6px);
+  will-change: opacity, filter;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal__word {
+    opacity: 1 !important;
+    filter: none !important;
+    will-change: auto;
+  }
+}
+
+/* Scroll-linked fade for [data-scroll-fade] blocks (avoids content pop-in) */
+@media (prefers-reduced-motion: no-preference) {
+  html.js [data-scroll-fade] {
+    opacity: 0;
+    transform: translate3d(0, 1.75rem, 0);
+    will-change: opacity, transform;
   }
 }

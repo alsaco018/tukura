@@ -1,0 +1,28 @@
+---
+import { FaqAccordion } from "./FaqAccordion";
+import ScrollReveal from "./ScrollReveal";
+import { faqItems } from "../data/faq";
+---
+
+<section
+  id="faq"
+  class="bg-theme-black px-5 py-8 text-theme-white"
+  aria-labelledby="faq-title"
+>
+  <div class="mx-auto flex w-full max-w-lg flex-col gap-8">
+    <header class="flex flex-col gap-5">
+      <p class="kicker" data-scroll-fade>FAQ</p>
+      <ScrollReveal
+        client:visible
+        as="h2"
+        id="faq-title"
+        text="¿Tienes alguna duda?"
+        textClassName="text-5xl font-semibold leading-[1.15] md:text-6xl"
+      />
+    </header>
+
+    <div data-scroll-fade data-scroll-fade-y="36">
+      <FaqAccordion client:load items={faqItems} defaultOpenId="embarazo" />
+    </div>
+  </div>
+</section>

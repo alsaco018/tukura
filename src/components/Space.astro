@@ -1,5 +1,6 @@
 ---
 import { SpaceGallery } from "./SpaceGallery";
+import ScrollReveal from "./ScrollReveal";
 import { site } from "../data/site";
 
 const { space } = site;
@@ -7,20 +8,35 @@ const { space } = site;
 
 <section
   id="espacio"
-  class="bg-brand-light px-5 py-10"
+  class="relative overflow-hidden bg-brand-light px-5 py-10"
   aria-labelledby="espacio-title"
 >
-  <div class="mx-auto flex w-full max-w-lg flex-col gap-6">
+  <div class="relative mx-auto flex w-full max-w-lg flex-col gap-8">
     <div class="flex flex-col gap-5 text-theme-black">
-      <p class="kicker">{space.kicker}</p>
-      <h2 id="espacio-title" class="text-4xl font-semibold leading-[44px]">
-        {space.title}
-      </h2>
-      <div class="flex flex-col gap-4 text-base font-normal leading-6">
-        {space.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+      <p class="kicker" data-scroll-fade>{space.kicker}</p>
+      <ScrollReveal
+        client:visible
+        as="h2"
+        id="espacio-title"
+        text={space.title}
+        textClassName="text-5xl font-semibold leading-[1.15] md:text-6xl"
+      />
+      <div class="flex flex-col gap-4 text-lg font-normal leading-7">
+        {
+          space.paragraphs.map((paragraph) => (
+            <ScrollReveal
+              client:visible
+              as="p"
+              text={paragraph}
+              textClassName="text-lg font-normal leading-7"
+            />
+          ))
+        }
       </div>
     </div>
 
-    <SpaceGallery client:load images={space.images} />
+    <div data-scroll-fade data-scroll-fade-y="40">
+      <SpaceGallery client:load images={space.images} />
+    </div>
   </div>
 </section>

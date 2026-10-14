@@ -85,7 +85,7 @@ export const carta = {
   contact: {
     kicker: "Contacto y reservas",
     phoneDisplay: "641 984 714",
-    phoneHref: "https://wa.me/34641984714",
+    phoneHref: "#contacto",
     address: "C/ Madre de Dios, n° 7. Centro Apófisis.",
     instagram: {
       handle: "@tukura_bienestar",

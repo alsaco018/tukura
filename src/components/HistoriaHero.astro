@@ -1,0 +1,33 @@
+---
+import ScrollReveal from "./ScrollReveal";
+import { historia } from "../data/historia";
+---
+
+<section
+  class="bg-brand-light px-5 pb-10 pt-28"
+  aria-labelledby="historia-page-title"
+>
+  <div class="mx-auto flex w-full max-w-lg flex-col items-center gap-8 text-theme-black">
+    <img
+      src={historia.turtle}
+      alt=""
+      width="106"
+      height="64"
+      class="h-16 w-auto"
+      aria-hidden="true"
+      data-scroll-fade
+      data-scroll-fade-y="20"
+    />
+
+    <div class="flex w-full flex-col gap-5">
+      <p class="kicker" data-scroll-fade>{historia.kicker}</p>
+      <ScrollReveal
+        client:visible
+        as="h1"
+        id="historia-page-title"
+        text={historia.title}
+        textClassName="font-display text-[44px] font-normal leading-[1.15] md:text-6xl"
+      />
+    </div>
+  </div>
+</section>

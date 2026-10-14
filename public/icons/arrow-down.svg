@@ -1,9 +1,9 @@
 <svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g id="arrow_down">
-<mask id="mask0_0_161" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+<mask id="mask0_0_276" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
 <rect id="Bounding box" width="24" height="24" fill="#D9D9D9"/>
 </mask>
-<g mask="url(#mask0_0_161)">
+<g mask="url(#mask0_0_276)">
 <path id="arrow_upward" d="M12.9 4.8L12.9 15.75L17.925 10.725L19.2 12L12 19.2L4.8 12L6.075 10.725L11.1 15.75L11.1 4.8L12.9 4.8Z" fill="#FFE0E8"/>
 </g>
 </g>

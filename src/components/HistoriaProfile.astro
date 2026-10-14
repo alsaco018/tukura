@@ -1,0 +1,50 @@
+---
+import ScrollReveal from "./ScrollReveal";
+import { historia } from "../data/historia";
+
+const { profile } = historia;
+---
+
+<section
+  class="bg-accent pt-10 text-theme-white"
+  aria-labelledby="historia-profile-title"
+>
+  <div class="mx-auto flex w-full max-w-lg flex-col gap-6 px-5">
+    <div class="flex flex-col gap-5">
+      <p class="kicker" data-scroll-fade>{profile.kicker}</p>
+      <ScrollReveal
+        client:visible
+        as="h2"
+        id="historia-profile-title"
+        text={profile.name}
+        textClassName="text-5xl font-semibold leading-[1.15] md:text-6xl"
+      />
+      <ScrollReveal
+        client:visible
+        as="p"
+        text={profile.body}
+        textClassName="text-lg font-normal leading-7"
+      />
+    </div>
+
+    <blockquote class="border-l-2 border-theme-white pl-6">
+      <ScrollReveal
+        client:visible
+        as="p"
+        text={profile.quote}
+        textClassName="text-xl italic leading-[28px]"
+      />
+    </blockquote>
+  </div>
+
+  <div class="mt-6 h-[353px] w-full overflow-hidden" data-scroll-fade data-scroll-fade-y="48">
+    <img
+      src={profile.image}
+      alt="Patricia Guillén en un ambiente de bienestar"
+      class="h-full w-full object-cover"
+      width="786"
+      height="706"
+      loading="lazy"
+    />
+  </div>
+</section>

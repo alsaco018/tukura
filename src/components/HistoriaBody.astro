@@ -1,0 +1,19 @@
+---
+import ScrollReveal from "./ScrollReveal";
+import { historia } from "../data/historia";
+---
+
+<section class="bg-brand-light px-5 pb-10" aria-label="Relato de TUKURA">
+  <div class="mx-auto flex w-full max-w-lg flex-col gap-6 text-lg font-normal leading-7 text-theme-black">
+    {
+      historia.paragraphs.map((paragraph) => (
+        <ScrollReveal
+          client:visible
+          as="p"
+          text={paragraph}
+          textClassName="text-lg font-normal leading-7"
+        />
+      ))
+    }
+  </div>
+</section>

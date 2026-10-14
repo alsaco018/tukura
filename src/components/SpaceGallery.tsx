@@ -1,31 +1,34 @@
+import DepthCarousel, { CARD_RADIUS } from "./DepthCarousel";
+
 type SpaceGalleryProps = {
   images: readonly string[];
 };
 
 export const SpaceGallery = ({ images }: SpaceGalleryProps) => {
+  const items = images.map((image, index) => ({
+    image,
+    alt: `Espacio TUKURA ${index + 1}`,
+  }));
+
   return (
-    <div
-      className="-mx-5 flex gap-5 overflow-x-auto px-5 pb-2 snap-x snap-mandatory [scrollbar-width:thin]"
-      role="list"
-      aria-label="Galería del espacio"
-      tabIndex={0}
-    >
-      {images.map((src, index) => (
-        <div
-          key={src}
-          className="h-[228px] w-[304px] shrink-0 snap-start overflow-hidden rounded-[40px]"
-          role="listitem"
-        >
-          <img
-            src={src}
-            alt={`Espacio TUKURA ${index + 1}`}
-            className="h-full w-full object-cover"
-            width={304}
-            height={228}
-            loading="lazy"
-          />
-        </div>
-      ))}
+    <div className="h-[320px] w-full sm:h-[400px]">
+      <DepthCarousel
+        items={items}
+        cardWidth={460}
+        cardHeight={340}
+        radius={CARD_RADIUS}
+        tint="#4d3114"
+        depth={160}
+        spread={56}
+        visibleCards={3}
+        autoplay
+        autoplayDelay={5000}
+        loop
+        showControls
+        showIndicators
+        ariaLabel="Galería del espacio"
+        className="min-h-0"
+      />
     </div>
   );
 };

@@ -1,0 +1,28 @@
+---
+import ScrollReveal from "./ScrollReveal";
+import { ReviewsSlider } from "./ReviewsSlider";
+import { reviews } from "../data/reviews";
+---
+
+<section
+  id="resenas"
+  class="bg-brand-light px-5 py-8"
+  aria-labelledby="resenas-title"
+>
+  <div class="mx-auto flex w-full max-w-lg flex-col gap-8">
+    <header class="flex flex-col gap-5 text-theme-black">
+      <p class="kicker" data-scroll-fade>reseñas</p>
+      <ScrollReveal
+        client:visible
+        as="h2"
+        id="resenas-title"
+        text="Apreciamos tu opinión"
+        textClassName="text-5xl font-semibold leading-[1.15] md:text-6xl"
+      />
+    </header>
+
+    <div data-scroll-fade data-scroll-fade-y="40">
+      <ReviewsSlider client:load reviews={reviews} />
+    </div>
+  </div>
+</section>

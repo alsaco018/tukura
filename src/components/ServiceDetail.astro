@@ -1,0 +1,55 @@
+---
+import Badge from "./Badge.astro";
+import Button from "./Button.astro";
+import ScrollReveal from "./ScrollReveal";
+import ServiceScrollExpand from "./ServiceScrollExpand";
+import type { Service } from "../data/services";
+import { buildServiceWhatsAppUrl } from "../lib/whatsapp";
+
+interface Props {
+  service: Service;
+}
+
+const { service } = Astro.props;
+const reserveHref = buildServiceWhatsAppUrl(service.title);
+---
+
+<article class="bg-brand-light">
+  <ServiceScrollExpand
+    client:load
+    image={service.image}
+    kicker={service.kicker}
+    title={service.title}
+    lead={service.lead}
+  />
+
+  <div class="mx-auto flex w-full max-w-lg flex-col gap-8 px-5 py-10">
+    <div class="flex flex-col gap-5 text-theme-black">
+      <div class="flex flex-wrap gap-2" data-scroll-fade>
+        <Badge label={service.price} />
+        <Badge label={service.duration} />
+      </div>
+
+      <div class="flex flex-col gap-4 text-lg font-normal leading-7">
+        {
+          service.detail.map((paragraph) => (
+            <ScrollReveal
+              client:visible
+              as="p"
+              text={paragraph}
+              textClassName="text-lg font-normal leading-7"
+            />
+          ))
+        }
+      </div>
+    </div>
+
+    <Button
+      href={reserveHref}
+      label="Reserva"
+      variant="primary"
+      class="w-full max-w-[353px] self-start"
+      scrollFade
+    />
+  </div>
+</article>
