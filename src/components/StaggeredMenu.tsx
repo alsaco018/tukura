@@ -37,6 +37,8 @@ export type StaggeredMenuProps = {
   closeOnClickAway?: boolean;
   onMenuOpen?: () => void;
   onMenuClose?: () => void;
+  /** Called on item click before the menu closes. Call preventDefault to own navigation. */
+  onItemClick?: (event: ReactMouseEvent<HTMLAnchorElement>) => void;
   isFixed?: boolean;
   /** Controlled open state (when provided, animations sync to this value). */
   open?: boolean;
@@ -70,6 +72,7 @@ export const StaggeredMenu = ({
   closeOnClickAway = true,
   onMenuOpen,
   onMenuClose,
+  onItemClick,
   open: openProp,
   hideHeader = false,
   panelId = "staggered-menu-panel",
@@ -500,11 +503,7 @@ export const StaggeredMenu = ({
   }, [closeOnClickAway, open, closeMenu]);
 
   const handleItemClick = (event: ReactMouseEvent<HTMLAnchorElement>) => {
-    const href = event.currentTarget.getAttribute("href");
-    if (href?.startsWith("#") || href?.includes("#")) {
-      closeMenu();
-      return;
-    }
+    onItemClick?.(event);
     closeMenu();
   };
 

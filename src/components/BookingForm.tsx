@@ -26,6 +26,11 @@ type MassageOption = {
   title: string;
 };
 
+type BookingFormProps = {
+  /** When set, locks the form to this massage and hides the type selector. */
+  preselectedServiceId?: string;
+};
+
 const TOTAL_STEPS = 2;
 
 const CHIP_LABELS: Record<string, string> = {
@@ -65,9 +70,20 @@ const labelClassName = "text-base font-semibold leading-6 text-theme-black";
 
 const ACCENT = "#c26d82";
 
-export const BookingForm = () => {
+export const BookingForm = ({ preselectedServiceId }: BookingFormProps) => {
+  const lockedServiceId =
+    preselectedServiceId &&
+    massageOptions.some((option) => option.id === preselectedServiceId)
+      ? preselectedServiceId
+      : undefined;
+  const hideMassageSelect = Boolean(lockedServiceId);
+
   const [step, setStep] = useState(1);
-  const [form, setForm] = useState<FormState>(initialForm);
+  const [form, setForm] = useState<FormState>(() =>
+    lockedServiceId
+      ? { ...initialForm, massageIds: [lockedServiceId] }
+      : initialForm,
+  );
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>(
     {},
@@ -105,7 +121,7 @@ export const BookingForm = () => {
   };
 
   const validateStep1 = (): boolean => {
-    if (form.massageIds.length === 0) {
+    if (!hideMassageSelect && form.massageIds.length === 0) {
       setErrors({ massageIds: "Elige al menos un masaje" });
       return false;
     }
@@ -240,162 +256,170 @@ export const BookingForm = () => {
           </div>
         }
       >
-        <Step title="Pedido">
+        <Step title="Tu masaje">
           <div className="flex w-full flex-col gap-6 py-2">
-            <div
-              className="relative flex w-full flex-col gap-2"
-              ref={dropdownRef}
-            >
-              <label className={labelClassName} htmlFor={`${formId}-massages`}>
-                ¿Qué necesitas?
-              </label>
+            {!hideMassageSelect && (
               <div
-                id={`${formId}-massages`}
-                className={[
-                  "flex min-h-12 w-full items-center gap-3 rounded-lg border bg-theme-white px-4 py-2.5",
-                  errors.massageIds ? "border-accent" : "border-accent-light/80",
-                ].join(" ")}
+                className="relative flex w-full flex-col gap-2"
+                ref={dropdownRef}
               >
-                <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2 overflow-hidden">
-                  {selectedMassages.length === 0 ? (
+                <label className={labelClassName} htmlFor={`${formId}-massages`}>
+                  ¿Qué necesitas?
+                </label>
+                <div
+                  id={`${formId}-massages`}
+                  className={[
+                    "flex min-h-12 w-full items-center gap-3 rounded-lg border bg-theme-white px-4 py-2.5",
+                    errors.massageIds
+                      ? "border-accent"
+                      : "border-accent-light/80",
+                  ].join(" ")}
+                >
+                  <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2 overflow-hidden">
+                    {selectedMassages.length === 0 ? (
+                      <button
+                        type="button"
+                        className="text-left text-base text-theme-black/55"
+                        aria-expanded={isDropdownOpen}
+                        aria-controls={`${formId}-massage-list`}
+                        aria-haspopup="listbox"
+                        tabIndex={0}
+                        onClick={() => setIsDropdownOpen(true)}
+                        onKeyDown={(event) => {
+                          if (event.key === "Enter" || event.key === " ") {
+                            event.preventDefault();
+                            setIsDropdownOpen(true);
+                          }
+                        }}
+                      >
+                        Selecciona uno o varios
+                      </button>
+                    ) : (
+                      selectedMassages.map((massage) => (
+                        <span
+                          key={massage.id}
+                          className="inline-flex items-center gap-2.5 rounded-lg bg-accent-light px-2.5 py-1 text-sm font-semibold uppercase leading-5 tracking-[1px] text-theme-black"
+                        >
+                          {massage.chipLabel}
+                          <button
+                            type="button"
+                            className="inline-flex size-[7.5px] items-center justify-center"
+                            aria-label={`Quitar ${massage.title}`}
+                            tabIndex={0}
+                            onClick={() => handleRemoveMassage(massage.id)}
+                            onKeyDown={(event) => {
+                              if (event.key === "Enter" || event.key === " ") {
+                                event.preventDefault();
+                                handleRemoveMassage(massage.id);
+                              }
+                            }}
+                          >
+                            <img
+                              src="/icons/form/chip-close.svg"
+                              alt=""
+                              width={8}
+                              height={8}
+                              className="size-[7.5px]"
+                            />
+                          </button>
+                        </span>
+                      ))
+                    )}
+                  </div>
+
+                  <div className="flex shrink-0 items-center gap-2">
                     <button
                       type="button"
-                      className="text-left text-base text-theme-black/55"
+                      className="inline-flex size-6 items-center justify-center"
                       aria-expanded={isDropdownOpen}
                       aria-controls={`${formId}-massage-list`}
                       aria-haspopup="listbox"
+                      aria-label={
+                        isDropdownOpen ? "Cerrar lista" : "Abrir lista"
+                      }
                       tabIndex={0}
-                      onClick={() => setIsDropdownOpen(true)}
+                      onClick={() => setIsDropdownOpen((open) => !open)}
                       onKeyDown={(event) => {
                         if (event.key === "Enter" || event.key === " ") {
                           event.preventDefault();
-                          setIsDropdownOpen(true);
+                          setIsDropdownOpen((open) => !open);
+                        }
+                        if (event.key === "Escape") {
+                          setIsDropdownOpen(false);
                         }
                       }}
                     >
-                      Selecciona uno o varios
+                      <img
+                        src="/icons/form/chevron-down.svg"
+                        alt=""
+                        width={24}
+                        height={24}
+                        className={[
+                          "size-6 transition-transform",
+                          isDropdownOpen ? "rotate-180" : "",
+                        ].join(" ")}
+                      />
                     </button>
-                  ) : (
-                    selectedMassages.map((massage) => (
-                      <span
-                        key={massage.id}
-                        className="inline-flex items-center gap-2.5 rounded-lg bg-accent-light px-2.5 py-1 text-sm font-semibold uppercase leading-5 tracking-[1px] text-theme-black"
-                      >
-                        {massage.chipLabel}
-                        <button
-                          type="button"
-                          className="inline-flex size-[7.5px] items-center justify-center"
-                          aria-label={`Quitar ${massage.title}`}
-                          tabIndex={0}
-                          onClick={() => handleRemoveMassage(massage.id)}
-                          onKeyDown={(event) => {
-                            if (event.key === "Enter" || event.key === " ") {
-                              event.preventDefault();
-                              handleRemoveMassage(massage.id);
-                            }
-                          }}
-                        >
-                          <img
-                            src="/icons/form/chip-close.svg"
-                            alt=""
-                            width={8}
-                            height={8}
-                            className="size-[7.5px]"
-                          />
-                        </button>
-                      </span>
-                    ))
-                  )}
+                  </div>
                 </div>
 
-                <div className="flex shrink-0 items-center gap-2">
-                  <button
-                    type="button"
-                    className="inline-flex size-6 items-center justify-center"
-                    aria-expanded={isDropdownOpen}
-                    aria-controls={`${formId}-massage-list`}
-                    aria-haspopup="listbox"
-                    aria-label={isDropdownOpen ? "Cerrar lista" : "Abrir lista"}
-                    tabIndex={0}
-                    onClick={() => setIsDropdownOpen((open) => !open)}
-                    onKeyDown={(event) => {
-                      if (event.key === "Enter" || event.key === " ") {
-                        event.preventDefault();
-                        setIsDropdownOpen((open) => !open);
-                      }
-                      if (event.key === "Escape") {
-                        setIsDropdownOpen(false);
-                      }
-                    }}
+                {isDropdownOpen && (
+                  <ul
+                    id={`${formId}-massage-list`}
+                    role="listbox"
+                    aria-multiselectable="true"
+                    aria-label="Masajes disponibles"
+                    className="absolute top-[calc(100%+4px)] z-30 max-h-none w-full overflow-visible rounded-lg border border-accent-light/80 bg-theme-white py-2 shadow-sm"
                   >
-                    <img
-                      src="/icons/form/chevron-down.svg"
-                      alt=""
-                      width={24}
-                      height={24}
-                      className={[
-                        "size-6 transition-transform",
-                        isDropdownOpen ? "rotate-180" : "",
-                      ].join(" ")}
-                    />
-                  </button>
-                </div>
-              </div>
-
-              {isDropdownOpen && (
-                <ul
-                  id={`${formId}-massage-list`}
-                  role="listbox"
-                  aria-multiselectable="true"
-                  aria-label="Masajes disponibles"
-                  className="absolute top-[calc(100%+4px)] z-30 max-h-none w-full overflow-visible rounded-lg border border-accent-light/80 bg-theme-white py-2 shadow-sm"
-                >
-                  {massageOptions.map((option) => {
-                    const isSelected = form.massageIds.includes(option.id);
-                    return (
-                      <li
-                        key={option.id}
-                        role="option"
-                        aria-selected={isSelected}
-                      >
-                        <button
-                          type="button"
-                          className={[
-                            "flex w-full items-center justify-between px-4 py-2.5 text-left text-base transition-colors hover:bg-accent-lighter",
-                            isSelected ? "bg-accent-light font-semibold" : "",
-                          ].join(" ")}
-                          tabIndex={0}
-                          onClick={() => handleToggleMassage(option.id)}
-                          onKeyDown={(event) => {
-                            if (event.key === "Enter" || event.key === " ") {
-                              event.preventDefault();
-                              handleToggleMassage(option.id);
-                            }
-                          }}
+                    {massageOptions.map((option) => {
+                      const isSelected = form.massageIds.includes(option.id);
+                      return (
+                        <li
+                          key={option.id}
+                          role="option"
+                          aria-selected={isSelected}
                         >
-                          <span>{option.title}</span>
-                          {isSelected && (
-                            <img
-                              src="/icons/form/check.svg"
-                              alt=""
-                              width={16}
-                              height={16}
-                              className="size-4"
-                            />
-                          )}
-                        </button>
-                      </li>
-                    );
-                  })}
-                </ul>
-              )}
+                          <button
+                            type="button"
+                            className={[
+                              "flex w-full items-center justify-between px-4 py-2.5 text-left text-base transition-colors hover:bg-accent-lighter",
+                              isSelected
+                                ? "bg-accent-light font-semibold"
+                                : "",
+                            ].join(" ")}
+                            tabIndex={0}
+                            onClick={() => handleToggleMassage(option.id)}
+                            onKeyDown={(event) => {
+                              if (event.key === "Enter" || event.key === " ") {
+                                event.preventDefault();
+                                handleToggleMassage(option.id);
+                              }
+                            }}
+                          >
+                            <span>{option.title}</span>
+                            {isSelected && (
+                              <img
+                                src="/icons/form/check.svg"
+                                alt=""
+                                width={16}
+                                height={16}
+                                className="size-4"
+                              />
+                            )}
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
 
-              {errors.massageIds && (
-                <p className="text-sm text-accent" role="alert">
-                  {errors.massageIds}
-                </p>
-              )}
-            </div>
+                {errors.massageIds && (
+                  <p className="text-sm text-accent" role="alert">
+                    {errors.massageIds}
+                  </p>
+                )}
+              </div>
+            )}
 
             <div className="flex w-full flex-col gap-2">
               <label
@@ -419,7 +443,7 @@ export const BookingForm = () => {
           </div>
         </Step>
 
-        <Step title="Tu info">
+        <Step title="Contacto">
           <div className="flex w-full flex-col gap-6 py-2">
             <div className="flex w-full flex-col gap-2">
               <label

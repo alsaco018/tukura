@@ -1,17 +1,15 @@
 ---
 import Badge from "./Badge.astro";
-import Button from "./Button.astro";
+import { BookingForm } from "./BookingForm";
 import ScrollReveal from "./ScrollReveal";
 import ServiceScrollExpand from "./ServiceScrollExpand";
 import type { Service } from "../data/services";
-import { buildServiceWhatsAppUrl } from "../lib/whatsapp";
 
 interface Props {
   service: Service;
 }
 
 const { service } = Astro.props;
-const reserveHref = buildServiceWhatsAppUrl(service.title);
 ---
 
 <article class="bg-brand-light">
@@ -44,12 +42,8 @@ const reserveHref = buildServiceWhatsAppUrl(service.title);
       </div>
     </div>
 
-    <Button
-      href={reserveHref}
-      label="Reserva"
-      variant="primary"
-      class="w-full max-w-[353px] self-start"
-      scrollFade
-    />
+    <div class="w-full" data-scroll-fade>
+      <BookingForm client:load preselectedServiceId={service.id} />
+    </div>
   </div>
 </article>

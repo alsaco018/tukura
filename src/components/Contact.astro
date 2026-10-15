@@ -14,7 +14,7 @@ const { contact } = site;
   <div
     class="relative h-60 w-full overflow-hidden rounded-b-[999px]"
     data-scroll-fade
-    data-scroll-fade-y="40"
+
   >
     <img
       src="/images/booking-hero.jpg"
@@ -45,7 +45,7 @@ const { contact } = site;
       />
     </header>
 
-    <div class="w-full" data-scroll-fade data-scroll-fade-y="36">
+    <div class="w-full" data-scroll-fade>
       <BookingForm client:load />
     </div>
 
@@ -84,27 +84,34 @@ const { contact } = site;
           {contact.instagram.label}
         </a>
       </li>
-      <li class="inline-flex items-center gap-2 text-base font-normal leading-6">
-        <img
-          src="/icons/map-pin.svg"
-          alt=""
-          width="24"
-          height="24"
-          class="size-6 shrink-0"
-        />
-        <span>{contact.address}</span>
+      <li>
+        <a
+          href={contact.mapUrl}
+          class="inline-flex items-center gap-2 text-base font-normal leading-6 text-theme-black transition-opacity hover:opacity-80"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            src="/icons/map-pin.svg"
+            alt=""
+            width="24"
+            height="24"
+            class="size-6 shrink-0"
+          />
+          {contact.address}
+        </a>
       </li>
     </ul>
   </div>
 
-  <div class="h-[295px] w-full overflow-hidden" data-scroll-fade data-scroll-fade-y="48">
-    <img
-      src={contact.mapImage}
-      alt={`Mapa de ubicación: ${contact.address}`}
-      class="h-full w-full object-cover"
-      width="786"
-      height="590"
+  <div class="h-[295px] w-full overflow-hidden" data-scroll-fade>
+    <iframe
+      title={`Mapa de ubicación: ${contact.address}`}
+      src={contact.mapEmbedUrl}
+      class="h-full w-full border-0"
       loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+      allowfullscreen
     />
   </div>
 </section>

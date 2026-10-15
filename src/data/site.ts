@@ -18,7 +18,10 @@ export const site = {
       href: "https://instagram.com/tukura_bienestar",
     },
     address: "C/ Madre de Dios, n° 7. Centro Apófisis.",
-    mapImage: "/images/contact-map.png",
+    mapUrl:
+      "https://www.google.com/maps/place/Centro+Ap%C3%B3fisis+Osteopat%C3%ADa+y+Terapias+manuales+%7C+Jerez/@36.6785886,-6.1304426,18z/data=!4m6!3m5!1s0xd0dc6ed46a3685f:0xe58d825844fc4d42!8m2!3d36.678793!4d-6.1289674!16s%2Fg%2F1tfyfv2d",
+    mapEmbedUrl:
+      "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d791.8!2d-6.1289674!3d36.678793!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd0dc6ed46a3685f%3A0xe58d825844fc4d42!2sCentro%20Ap%C3%B3fisis%20Osteopat%C3%ADa%20y%20Terapias%20manuales%20%7C%20Jerez!5e0!3m2!1ses!2ses!4v1729000000000!5m2!1ses!2ses",
     kicker: "contacta con nosotros",
     title: "Pide cita y regálate una pausa",
   },

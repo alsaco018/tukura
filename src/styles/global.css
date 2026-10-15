@@ -149,11 +149,10 @@ body {
   }
 }
 
-/* Scroll-linked fade for [data-scroll-fade] blocks (avoids content pop-in) */
+/* Scroll-linked fade for [data-scroll-fade] blocks (opacity only; layout box stays put) */
 @media (prefers-reduced-motion: no-preference) {
   html.js [data-scroll-fade] {
     opacity: 0;
-    transform: translate3d(0, 1.75rem, 0);
-    will-change: opacity, transform;
+    will-change: opacity;
   }
 }

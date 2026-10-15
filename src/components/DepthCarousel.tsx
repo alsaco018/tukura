@@ -23,8 +23,8 @@ export type DepthCarouselSlide = {
 export type DepthCarouselItem = string | DepthCarouselSlide;
 type TiltDirection = 'left' | 'right';
 
-/** Matches site card corners: top-right + bottom-left */
-export const CARD_RADIUS = '0 40px 0 40px';
+/** Uniform corner radius for all carousel cards */
+export const CARD_RADIUS = '40px';
 
 export interface DepthCarouselProps {
   items?: DepthCarouselItem[];
@@ -48,6 +48,8 @@ export interface DepthCarouselProps {
   loop?: boolean;
   showControls?: boolean;
   showIndicators?: boolean;
+  /** Nav button / indicator pill color tone */
+  controlsTone?: 'accent' | 'accent-2';
   ariaLabel?: string;
   cardClassName?: string;
   onChange?: (index: number, item: DepthCarouselSlide) => void;
@@ -114,12 +116,18 @@ const DepthCarousel = ({
   loop = true,
   showControls = true,
   showIndicators = true,
+  controlsTone = 'accent',
   ariaLabel = 'Carrusel',
   cardClassName = '',
   onChange,
   className = ''
 }: DepthCarouselProps) => {
   const cardRadius = typeof radius === 'number' ? `${radius}px` : radius;
+  const controlBg =
+    controlsTone === 'accent-2'
+      ? 'bg-accent-2 hover:bg-accent-2-medium focus-visible:outline-accent-2'
+      : 'bg-accent hover:bg-accent-medium focus-visible:outline-accent';
+  const indicatorBg = controlsTone === 'accent-2' ? 'bg-accent-2' : 'bg-accent';
   const data = useMemo(() => (Array.isArray(items) ? items : []).map(normalizeItem), [items]);
   const count = data.length;
 
@@ -483,7 +491,7 @@ const DepthCarousel = ({
         <>
           <button
             type="button"
-            className="absolute left-3 top-1/2 z-[3000] grid size-10 -translate-y-1/2 place-items-center rounded-full bg-accent-light text-theme-black transition-colors hover:bg-accent-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent active:scale-95"
+            className={`absolute left-3 top-1/2 z-[3000] grid size-10 -translate-y-1/2 place-items-center rounded-full text-theme-white transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 active:scale-95 ${controlBg}`}
             aria-label="Slide anterior"
             onClick={() => navigateBy(-1)}
           >
@@ -500,7 +508,7 @@ const DepthCarousel = ({
           </button>
           <button
             type="button"
-            className="absolute right-3 top-1/2 z-[3000] grid size-10 -translate-y-1/2 place-items-center rounded-full bg-accent-light text-theme-black transition-colors hover:bg-accent-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent active:scale-95"
+            className={`absolute right-3 top-1/2 z-[3000] grid size-10 -translate-y-1/2 place-items-center rounded-full text-theme-white transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 active:scale-95 ${controlBg}`}
             aria-label="Slide siguiente"
             onClick={() => navigateBy(1)}
           >
@@ -520,7 +528,7 @@ const DepthCarousel = ({
 
       {showIndicators && count > 1 && (
         <div
-          className="absolute bottom-4 left-1/2 z-[3000] flex -translate-x-1/2 gap-2 rounded-full bg-accent-light px-3 py-2"
+          className={`absolute bottom-4 left-1/2 z-[3000] flex -translate-x-1/2 gap-2 rounded-full px-3 py-2 ${indicatorBg}`}
           role="tablist"
           aria-label="Slides"
         >
@@ -532,7 +540,7 @@ const DepthCarousel = ({
               aria-selected={active === i}
               aria-label={`Ir al slide ${i + 1}`}
               className={`h-[7px] cursor-pointer rounded-full transition-[width,background] duration-[250ms] ${
-                active === i ? 'w-5 bg-theme-black' : 'w-[7px] bg-theme-black/35'
+                active === i ? 'w-5 bg-theme-white' : 'w-[7px] bg-theme-white/45'
               }`}
               onClick={() => setFocus(i, true)}
             />

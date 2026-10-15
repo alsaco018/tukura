@@ -45,6 +45,7 @@ export const GiftSlider = ({ slides, ctaHref }: GiftSliderProps) => {
           loop
           showControls
           showIndicators
+          controlsTone="accent-2"
           ariaLabel="Tarjetas regalo"
           className="min-h-0"
           onChange={(index) => setActiveIndex(index)}
