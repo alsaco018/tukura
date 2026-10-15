@@ -24,12 +24,17 @@ type MobileNavProps = {
   closeIconSrc?: string;
 };
 
+const normalizePath = (path: string): string => {
+  if (!path) return "/";
+  return path.length > 1 && path.endsWith("/") ? path.slice(0, -1) : path;
+};
+
 const getSamePageHashId = (href: string): string | null => {
   try {
     const url = new URL(href, window.location.href);
     const samePage =
       url.origin === window.location.origin &&
-      url.pathname === window.location.pathname;
+      normalizePath(url.pathname) === normalizePath(window.location.pathname);
     if (!samePage || url.hash.length <= 1) return null;
     return decodeURIComponent(url.hash.slice(1));
   } catch {
@@ -43,15 +48,79 @@ const getScrollPaddingTop = (): number => {
   return Number.isFinite(value) ? value : 0;
 };
 
-/** Absolute document Y for an element (stable before sticky scroll starts). */
 const getDocumentTop = (el: HTMLElement): number =>
   el.getBoundingClientRect().top + window.scrollY;
 
+/** Mobile + tablet only — keep desktop hash nav animated. */
+const isMobileOrTablet = (): boolean =>
+  typeof window !== "undefined" &&
+  window.matchMedia("(max-width: 1024px), (pointer: coarse)").matches;
+
+/** Temporarily disable CSS smooth scroll during programmatic hash jumps. */
+const withNavHashScrolling = (run: () => void): void => {
+  if (!isMobileOrTablet()) {
+    run();
+    return;
+  }
+
+  const html = document.documentElement;
+  html.classList.add("nav-hash-scrolling");
+  try {
+    run();
+  } finally {
+    window.setTimeout(() => {
+      html.classList.remove("nav-hash-scrolling");
+    }, 350);
+  }
+};
+
+/** iOS-safe body lock: overflow alone restores scroll poorly on unlock. */
+const lockBodyScroll = (): void => {
+  if (document.body.dataset.scrollLocked === "1") return;
+  const y = window.scrollY;
+  document.body.dataset.scrollLocked = "1";
+  document.body.dataset.scrollLockY = String(y);
+  document.body.style.position = "fixed";
+  document.body.style.top = `-${y}px`;
+  document.body.style.left = "0";
+  document.body.style.right = "0";
+  document.body.style.width = "100%";
+  document.body.style.overflow = "hidden";
+};
+
+const unlockBodyScroll = (): number => {
+  if (document.body.dataset.scrollLocked !== "1") {
+    document.body.style.overflow = "";
+    return window.scrollY;
+  }
+  const y = Number(document.body.dataset.scrollLockY || "0");
+  document.body.style.position = "";
+  document.body.style.top = "";
+  document.body.style.left = "";
+  document.body.style.right = "";
+  document.body.style.width = "";
+  document.body.style.overflow = "";
+  delete document.body.dataset.scrollLocked;
+  delete document.body.dataset.scrollLockY;
+  withNavHashScrolling(() => {
+    window.scrollTo({ top: y, behavior: "instant" });
+  });
+  return y;
+};
+
 /**
- * Manual scroll that keeps driving toward the target each frame.
- * Native smooth scrollIntoView aborts mid-way across sticky ScrollStack sections.
+ * Desktop: eased rAF scroll. Mobile/tablet nav: instant jump with
+ * scroll-behavior: auto so fade/scrub keep working during normal scroll.
  */
-const animateScrollTo = (top: number, onDone?: () => void): (() => void) => {
+const scrollWindowTo = (top: number, onDone?: () => void): (() => void) => {
+  if (isMobileOrTablet()) {
+    withNavHashScrolling(() => {
+      window.scrollTo({ top, behavior: "instant" });
+    });
+    onDone?.();
+    return () => undefined;
+  }
+
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const start = window.scrollY;
   const distance = top - start;
@@ -65,7 +134,6 @@ const animateScrollTo = (top: number, onDone?: () => void): (() => void) => {
   const durationMs = Math.min(1400, Math.max(450, Math.abs(distance) * 0.35));
   const startedAt = performance.now();
   let frame = 0;
-
   const easeOutCubic = (t: number) => 1 - (1 - t) ** 3;
 
   const tick = (now: number) => {
@@ -102,6 +170,7 @@ export const MobileNav = ({
   const skipFocusRef = useRef(false);
   const cancelScrollRef = useRef<(() => void) | null>(null);
   const isOpenRef = useRef(isOpen);
+  const scrollGenRef = useRef(0);
 
   isOpenRef.current = isOpen;
 
@@ -131,17 +200,41 @@ export const MobileNav = ({
 
     const padding = getScrollPaddingTop();
     const top = Math.max(0, getDocumentTop(el) - padding);
+    const gen = ++scrollGenRef.current;
 
     cancelScrollRef.current?.();
-    cancelScrollRef.current = animateScrollTo(top, () => {
-      // Correct for any layout shift after sticky sections settle.
+    cancelScrollRef.current = scrollWindowTo(top, () => {
+      if (gen !== scrollGenRef.current) return;
+      // Re-measure after sticky / address-bar layout settles.
       const settled = Math.max(0, getDocumentTop(el) - padding);
-      if (Math.abs(window.scrollY - settled) > 4) {
-        window.scrollTo({ top: settled, behavior: "instant" });
+      if (Math.abs(window.scrollY - settled) > 8) {
+        withNavHashScrolling(() => {
+          window.scrollTo({ top: settled, behavior: "instant" });
+        });
       }
       cancelScrollRef.current = null;
     });
   }, []);
+
+  const queueOrScrollTo = useCallback(
+    (targetId: string) => {
+      unlockBodyScroll();
+
+      if (isOpenRef.current) {
+        pendingScrollIdRef.current = targetId;
+        skipFocusRef.current = true;
+        setIsOpen(false);
+        // Schedule here (not only in an effect) so React Strict Mode /
+        // effect cleanup cannot swallow the navigation on mobile.
+        window.setTimeout(() => scrollToSection(targetId), 40);
+        window.setTimeout(() => scrollToSection(targetId), 300);
+        return;
+      }
+
+      scrollToSection(targetId);
+    },
+    [scrollToSection],
+  );
 
   const handleHashNavigate = (
     event: ReactMouseEvent<HTMLAnchorElement>,
@@ -152,18 +245,8 @@ export const MobileNav = ({
     const targetId = getSamePageHashId(href);
     if (!targetId) return false;
 
-    // Own same-page hash navigation; sticky stacks break native smooth scroll.
     event.preventDefault();
-    document.body.style.overflow = "";
-
-    if (isOpenRef.current) {
-      pendingScrollIdRef.current = targetId;
-      skipFocusRef.current = true;
-      setIsOpen(false);
-      return true;
-    }
-
-    scrollToSection(targetId);
+    queueOrScrollTo(targetId);
     return true;
   };
 
@@ -178,8 +261,7 @@ export const MobileNav = ({
   useEffect(() => {
     if (!isOpen) return;
 
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    lockBodyScroll();
 
     const handleEscape = (event: globalThis.KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -190,7 +272,7 @@ export const MobileNav = ({
     document.addEventListener("keydown", handleEscape);
 
     return () => {
-      document.body.style.overflow = previousOverflow;
+      unlockBodyScroll();
       document.removeEventListener("keydown", handleEscape);
       if (!skipFocusRef.current) {
         openButtonRef.current?.focus({ preventScroll: true });
@@ -199,25 +281,12 @@ export const MobileNav = ({
     };
   }, [isOpen]);
 
-  // Scroll after the drawer has closed and body overflow is restored.
-  useEffect(() => {
-    if (isOpen) return;
-
-    const targetId = pendingScrollIdRef.current;
-    if (!targetId) return;
-    pendingScrollIdRef.current = null;
-
-    scrollToSection(targetId);
-
-    return () => {
-      cancelScrollRef.current?.();
-      cancelScrollRef.current = null;
-    };
-  }, [isOpen, scrollToSection]);
-
   useEffect(
     () => () => {
       cancelScrollRef.current?.();
+      if (document.body.dataset.scrollLocked === "1") {
+        unlockBodyScroll();
+      }
     },
     [],
   );

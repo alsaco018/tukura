@@ -79,6 +79,11 @@ html {
   scroll-padding-top: 5rem;
 }
 
+/* Forced by MobileNav during hash jumps on mobile/tablet only */
+html.nav-hash-scrolling {
+  scroll-behavior: auto !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

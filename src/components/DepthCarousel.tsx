@@ -74,6 +74,7 @@ interface CarouselConfig {
 
 interface DragState {
   x: number;
+  y: number;
   startPos: number;
   lastX: number;
   lastT: number;
@@ -305,15 +306,18 @@ const DepthCarousel = ({
   const onPointerDown = useCallback((e: ReactPointerEvent<HTMLDivElement>) => {
     const cfg = cfgRef.current;
     if (cfg.count < 2) return;
-    tweenRef.current?.kill();
+    if (e.pointerType !== 'touch') {
+      tweenRef.current?.kill();
+    }
     dragRef.current = {
       x: e.clientX,
+      y: e.clientY,
       startPos: posRef.current,
       lastX: e.clientX,
       lastT: performance.now(),
       v: 0,
       moved: false,
-      id: e.pointerId
+      id: e.pointerId,
     };
   }, []);
 
@@ -324,11 +328,30 @@ const DepthCarousel = ({
       const cfg = cfgRef.current;
       const stepPx = Math.max(cfg.cardWidth * 0.55 * scaleRef.current, 40);
       const dx = e.clientX - drag.x;
-      if (!drag.moved && Math.abs(dx) > 4) {
-        drag.moved = true;
-        rootRef.current?.setPointerCapture(drag.id);
+      const dy = e.clientY - drag.y;
+
+      if (!drag.moved) {
+        if (e.pointerType === 'touch') {
+          const absX = Math.abs(dx);
+          const absY = Math.abs(dy);
+          // Vertical page scroll wins — do not capture the pointer.
+          if (absY > 8 && absY > absX) {
+            dragRef.current = null;
+            return;
+          }
+          // Need a clear horizontal swipe before taking over the gesture.
+          if (absX < 12 || absX < absY) return;
+          tweenRef.current?.kill();
+          drag.moved = true;
+          rootRef.current?.setPointerCapture(drag.id);
+        } else if (Math.abs(dx) > 4) {
+          drag.moved = true;
+          rootRef.current?.setPointerCapture(drag.id);
+        }
       }
+
       if (!drag.moved) return;
+
       const now = performance.now();
       const dt = Math.max(now - drag.lastT, 1);
       drag.v = (e.clientX - drag.lastX) / dt;

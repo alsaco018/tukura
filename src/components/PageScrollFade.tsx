@@ -10,8 +10,7 @@ const SELECTOR = "[data-scroll-fade]";
 
 /**
  * Scroll-linked fade for any [data-scroll-fade] element on the page.
- * Opacity only — no translateY — so section layout stays fixed and mobile
- * scroll does not jump while the trigger scrubs.
+ * Opacity only — no translateY — so section layout stays fixed.
  * Progress reverses when scrolling up so content does not pop in/out.
  *
  * Optional attributes:
@@ -39,8 +38,6 @@ const PageScrollFade = () => {
         const end = el.dataset.scrollFadeEnd ?? "top 62%";
         const scrub = Number(el.dataset.scrollFadeScrub ?? 1.2);
 
-        // Animate only opacity. Keep the element's layout box stable so the
-        // section always reserves space; avoid y-transforms that fight scroll.
         gsap.fromTo(
           el,
           { autoAlpha: 0 },
@@ -63,11 +60,9 @@ const PageScrollFade = () => {
     const refresh = () => ScrollTrigger.refresh();
     window.addEventListener("load", refresh);
     const t1 = window.setTimeout(refresh, 250);
-    const t2 = window.setTimeout(refresh, 900);
 
     return () => {
       window.clearTimeout(t1);
-      window.clearTimeout(t2);
       window.removeEventListener("load", refresh);
       document.documentElement.classList.remove("scroll-fade-ready");
       ctx.revert();
