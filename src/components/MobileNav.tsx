@@ -28,8 +28,14 @@ const PENDING_HASH_KEY = "tukura:pendingHash";
 
 const normalizePath = (path: string): string => {
   if (!path) return "/";
-  return path.length > 1 && path.endsWith("/") ? path.slice(0, -1) : path;
+  const trimmed =
+    path.length > 1 && path.endsWith("/") ? path.slice(0, -1) : path;
+  if (trimmed === "/index.html" || trimmed === "/index") return "/";
+  return trimmed || "/";
 };
+
+const pathsAreSamePage = (a: string, b: string): boolean =>
+  normalizePath(a) === normalizePath(b);
 
 const parseInternalHashLink = (
   href: string,
@@ -45,8 +51,7 @@ const parseInternalHashLink = (
       pathname: url.pathname,
       search: url.search,
       hashId,
-      samePage:
-        normalizePath(url.pathname) === normalizePath(window.location.pathname),
+      samePage: pathsAreSamePage(url.pathname, window.location.pathname),
     };
   } catch {
     return null;
@@ -200,13 +205,22 @@ export const MobileNav = ({
     }
   };
 
-  const scrollToSection = useCallback((targetId: string) => {
+  const scrollToSection = useCallback((targetId: string, attempt = 0) => {
     const el = document.getElementById(targetId);
-    if (!el) return;
+    if (!el) {
+      if (attempt < 24) {
+        window.setTimeout(() => scrollToSection(targetId, attempt + 1), 50);
+      }
+      return;
+    }
 
     const nextHash = `#${targetId}`;
     if (window.location.hash !== nextHash) {
-      history.pushState(null, "", nextHash);
+      history.pushState(
+        null,
+        "",
+        `${window.location.pathname}${window.location.search}${nextHash}`,
+      );
     }
 
     const padding = getScrollPaddingTop();
@@ -216,7 +230,6 @@ export const MobileNav = ({
     cancelScrollRef.current?.();
     cancelScrollRef.current = scrollWindowTo(top, () => {
       if (gen !== scrollGenRef.current) return;
-      // Re-measure after sticky / address-bar layout settles.
       const settled = Math.max(0, getDocumentTop(el) - padding);
       if (Math.abs(window.scrollY - settled) > 8) {
         withNavHashScrolling(() => {
@@ -227,7 +240,7 @@ export const MobileNav = ({
     });
   }, []);
 
-  const queueOrScrollTo = useCallback(
+  const closeOrScrollTo = useCallback(
     (targetId: string) => {
       unlockBodyScroll();
 
@@ -252,14 +265,13 @@ export const MobileNav = ({
       unlockBodyScroll();
       skipFocusRef.current = true;
       setIsOpen(false);
-      // Hand off the section id so the destination page can scroll after layout
-      // (native /#hash often lands short with sticky header + late content).
       try {
         sessionStorage.setItem(PENDING_HASH_KEY, hashId);
       } catch {
         /* private mode / blocked storage */
       }
-      const next = `${pathname}${search}#${encodeURIComponent(hashId)}`;
+      const nextPath = normalizePath(pathname) === "/" ? "/" : pathname;
+      const next = `${nextPath}${search}#${encodeURIComponent(hashId)}`;
       window.setTimeout(() => {
         window.location.assign(next);
       }, 40);
@@ -267,23 +279,29 @@ export const MobileNav = ({
     [],
   );
 
+  const navigateFromHref = useCallback(
+    (href: string | null): boolean => {
+      if (!href) return false;
+      const parsed = parseInternalHashLink(href);
+      if (!parsed) return false;
+
+      if (parsed.samePage) {
+        closeOrScrollTo(parsed.hashId);
+        return true;
+      }
+
+      navigateToHashOnOtherPage(parsed.pathname, parsed.search, parsed.hashId);
+      return true;
+    },
+    [closeOrScrollTo, navigateToHashOnOtherPage],
+  );
+
   const handleHashNavigate = (
     event: ReactMouseEvent<HTMLAnchorElement>,
   ): boolean => {
     const href = event.currentTarget.getAttribute("href");
-    if (!href) return false;
-
-    const parsed = parseInternalHashLink(href);
-    if (!parsed) return false;
-
+    if (!navigateFromHref(href)) return false;
     event.preventDefault();
-
-    if (parsed.samePage) {
-      closeOrScrollTo(parsed.hashId);
-      return true;
-    }
-
-    navigateToHashOnOtherPage(parsed.pathname, parsed.search, parsed.hashId);
     return true;
   };
 
@@ -335,17 +353,52 @@ export const MobileNav = ({
     const targetId = pending || fromUrl;
     if (!targetId) return;
 
-    const timers = [0, 80, 250, 500, 900].map((ms) =>
+    // One coordinated pass — avoid cancelling our own rAF scroll every 80ms.
+    const timers = [0, 120, 400, 900].map((ms) =>
       window.setTimeout(() => scrollToSection(targetId), ms),
     );
     const onLoad = () => scrollToSection(targetId);
+    const onPageShow = (event: PageTransitionEvent) => {
+      if (event.persisted) scrollToSection(targetId);
+    };
     window.addEventListener("load", onLoad);
+    window.addEventListener("pageshow", onPageShow);
 
     return () => {
       timers.forEach((id) => window.clearTimeout(id));
       window.removeEventListener("load", onLoad);
+      window.removeEventListener("pageshow", onPageShow);
     };
   }, [scrollToSection]);
+
+  // Catch plain <a href="/#contacto"> (Hero, Story, etc.) — browser won't
+  // re-scroll when the hash is already present.
+  useEffect(() => {
+    const onDocumentClick = (event: MouseEvent) => {
+      if (event.defaultPrevented || event.button !== 0) return;
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+
+      const anchor = target.closest("a[href]");
+      if (!(anchor instanceof HTMLAnchorElement)) return;
+      // Header CTA + drawer links have their own React handlers.
+      if (
+        anchor.dataset.navHashHandled === "true" ||
+        anchor.closest(".staggered-menu-panel")
+      ) {
+        return;
+      }
+
+      const href = anchor.getAttribute("href");
+      if (!navigateFromHref(href)) return;
+      event.preventDefault();
+    };
+
+    document.addEventListener("click", onDocumentClick);
+    return () => document.removeEventListener("click", onDocumentClick);
+  }, [navigateFromHref]);
 
   useEffect(
     () => () => {
@@ -382,6 +435,7 @@ export const MobileNav = ({
           <div className="flex items-center gap-2 sm:gap-6">
             <a
               href={ctaHref}
+              data-nav-hash-handled="true"
               className="inline-flex items-center justify-center whitespace-nowrap rounded-full bg-accent px-4 py-2 text-sm font-semibold leading-5 text-theme-white transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-lighter sm:px-8 sm:text-base sm:leading-6"
               target={ctaIsExternal ? "_blank" : undefined}
               rel={ctaIsExternal ? "noopener noreferrer" : undefined}
