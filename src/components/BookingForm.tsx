@@ -40,8 +40,28 @@ const CHIP_LABELS: Record<string, string> = {
   craneofacial: "Craneofacial",
   kobido: "Kobido facial",
   prenatal: "M. prenatal",
+  "tarjeta-regalo": "Tarjeta regalo",
+  "bono-5": "Bono 5 sesiones",
   informacion: "Información",
 };
+
+const EXTRA_OPTIONS: MassageOption[] = [
+  {
+    id: "tarjeta-regalo",
+    chipLabel: CHIP_LABELS["tarjeta-regalo"],
+    title: "Tarjeta regalo",
+  },
+  {
+    id: "bono-5",
+    chipLabel: CHIP_LABELS["bono-5"],
+    title: "Bono de 5 sesiones (200€)",
+  },
+  {
+    id: "informacion",
+    chipLabel: CHIP_LABELS.informacion,
+    title: "Información",
+  },
+];
 
 const massageOptions: MassageOption[] = [
   ...services.map((service) => ({
@@ -49,11 +69,7 @@ const massageOptions: MassageOption[] = [
     chipLabel: CHIP_LABELS[service.id] ?? service.title,
     title: service.title,
   })),
-  {
-    id: "informacion",
-    chipLabel: CHIP_LABELS.informacion,
-    title: "Información",
-  },
+  ...EXTRA_OPTIONS,
 ];
 
 const initialForm: FormState = {
@@ -145,7 +161,11 @@ export const BookingForm = ({ preselectedServiceId }: BookingFormProps) => {
 
   const openWhatsAppWithForm = () => {
     const message = buildBookingWhatsAppMessage({
-      massages: selectedMassages.map((item) => item.title),
+      massages: selectedMassages.map((item) =>
+        item.id === "tarjeta-regalo"
+          ? "me han regalado una tarjeta regalo"
+          : item.title,
+      ),
       objections: form.objections,
       firstName: form.firstName,
       lastName: form.lastName,
@@ -256,7 +276,7 @@ export const BookingForm = ({ preselectedServiceId }: BookingFormProps) => {
           </div>
         }
       >
-        <Step title="Tu masaje">
+        <Step title={hideMassageSelect ? "Tu solicitud" : "Tu masaje"}>
           <div className="flex w-full flex-col gap-6 py-2">
             {!hideMassageSelect && (
               <div
@@ -369,7 +389,7 @@ export const BookingForm = ({ preselectedServiceId }: BookingFormProps) => {
                     role="listbox"
                     aria-multiselectable="true"
                     aria-label="Masajes disponibles"
-                    className="absolute top-[calc(100%+4px)] z-30 max-h-none w-full overflow-visible rounded-lg border border-accent-light/80 bg-theme-white py-2 shadow-sm"
+                    className="absolute top-[calc(100%+4px)] z-30 max-h-56 w-full overflow-y-auto overscroll-contain rounded-lg border border-accent-light/80 bg-theme-white py-2 shadow-sm"
                   >
                     {massageOptions.map((option) => {
                       const isSelected = form.massageIds.includes(option.id);

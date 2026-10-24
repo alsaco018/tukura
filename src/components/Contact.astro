@@ -1,5 +1,6 @@
 ---
 import { BookingForm } from "./BookingForm";
+import { ConsentMap } from "./ConsentMap";
 import ScrollReveal from "./ScrollReveal";
 import { site } from "../data/site";
 
@@ -33,7 +34,7 @@ const { contact } = site;
     />
   </div>
 
-  <div class="mx-auto flex w-full max-w-lg flex-col items-center gap-10 px-5 py-10">
+  <div class="mx-auto flex w-full max-w-lg flex-col items-center gap-10 px-5 py-10 md:max-w-2xl">
     <header class="flex w-full flex-col gap-5 text-theme-black">
       <p class="kicker" data-scroll-fade>contacto</p>
       <ScrollReveal
@@ -105,13 +106,11 @@ const { contact } = site;
   </div>
 
   <div class="h-[295px] w-full overflow-hidden" data-scroll-fade>
-    <iframe
-      title={`Mapa de ubicación: ${contact.address}`}
-      src={contact.mapEmbedUrl}
-      class="h-full w-full border-0"
-      loading="lazy"
-      referrerpolicy="no-referrer-when-downgrade"
-      allowfullscreen
+    <ConsentMap
+      client:visible
+      embedUrl={contact.mapEmbedUrl}
+      address={contact.address}
+      mapUrl={contact.mapUrl}
     />
   </div>
 </section>

@@ -2,6 +2,9 @@
 import { ServicesStack } from "./ServicesStack";
 import ScrollReveal from "./ScrollReveal";
 import { services } from "../data/services";
+import { site } from "../data/site";
+
+const { servicesIntro } = site;
 ---
 
 <section
@@ -11,18 +14,23 @@ import { services } from "../data/services";
 >
   <div class="mx-auto flex w-full max-w-lg flex-col gap-6 md:max-w-2xl">
     <header class="flex flex-col gap-5 text-theme-black">
-      <p class="kicker" data-scroll-fade>Nuestros servicios</p>
+      <p class="kicker" data-scroll-fade>{servicesIntro.kicker}</p>
       <ScrollReveal
         client:visible
         as="h2"
         id="servicios-title"
-        text="Dedícate un momento"
+        text={servicesIntro.title}
         textClassName="text-5xl font-semibold leading-[1.15] md:text-6xl"
+      />
+      <ScrollReveal
+        client:visible
+        as="p"
+        text={servicesIntro.subtitle}
+        textClassName="text-lg font-normal leading-7"
       />
     </header>
 
-    <div data-scroll-fade>
-      <ServicesStack client:visible services={services} />
-    </div>
+    {/* No data-scroll-fade here: opacity on a sticky ancestor breaks pin release. */}
+    <ServicesStack client:visible services={services} />
   </div>
 </section>

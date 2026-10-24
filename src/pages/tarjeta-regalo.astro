@@ -1,0 +1,30 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { GiftCardExperience } from "../components/GiftCardExperience";
+import { site } from "../data/site";
+
+const rawName = Astro.url.searchParams.get("name")?.trim() ?? "";
+const initialName = rawName;
+
+const title = initialName
+  ? `Tarjeta regalo para ${initialName} | ${site.name}`
+  : `Tarjeta regalo | ${site.name}`;
+const description =
+  "Abre tu tarjeta regalo TUKURA: gira, despliega el tríptico y reserva tu sesión de masaje en Jerez.";
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonicalPath="/tarjeta-regalo"
+  image="/images/gift-card/exterior-center.png"
+  noindex={true}
+>
+  <Header />
+  <main id="main-content" class="bg-accent-2-light text-theme-black">
+    <GiftCardExperience client:load initialName={initialName} />
+  </main>
+  <Footer />
+</BaseLayout>

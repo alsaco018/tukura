@@ -31,7 +31,7 @@ export const buildBookingWhatsAppMessage = ({
   const lines = [
     "Hola, quiero pedir cita en TUKURA.",
     "",
-    `Masaje(s): ${massages.join(", ")}`,
+    `Solicitud: ${massages.join(", ")}`,
   ];
 
   if (objections.trim()) {

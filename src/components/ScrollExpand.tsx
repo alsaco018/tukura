@@ -10,9 +10,10 @@ const smoothstep = (edge0: number, edge1: number, x: number): number => {
   return t * t * (3 - 2 * t);
 };
 
-// Strong pink with the intro title; softer once the expanded copy takes over
+// Brown tint over the media; softer as the expanded copy takes over
 const TINT_START = 0.72;
 const TINT_END = 0.4;
+const TINT_RGB = "77 49 20"; // theme-black / brand brown
 
 type ConfigKey =
   | 'startWidth'
@@ -122,7 +123,7 @@ const ScrollExpand: React.FC<ScrollExpandProps> = ({
 
     if (tintRef.current) {
       const tintAlpha = TINT_START + (TINT_END - TINT_START) * e;
-      tintRef.current.style.backgroundColor = `rgb(194 109 130 / ${tintAlpha})`;
+      tintRef.current.style.backgroundColor = `rgb(${TINT_RGB} / ${tintAlpha})`;
     }
 
     if (scrimRef.current) scrimRef.current.style.opacity = `${c.overlayScrim * e}`;
@@ -266,7 +267,10 @@ const ScrollExpand: React.FC<ScrollExpandProps> = ({
       {...rest}
     >
       <div ref={trackRef} className="relative w-full">
-        <div ref={stageRef} className="sticky top-0 w-full overflow-hidden [--se-title-size:4rem]">
+        <div
+          ref={stageRef}
+          className="sticky top-0 w-full overflow-hidden bg-accent [--se-title-size:4rem]"
+        >
           <div
             ref={frameRef}
             className="absolute inset-0 [clip-path:inset(21%_29%_21%_29%_round_0_40px_0_40px)] [will-change:clip-path]"
@@ -275,12 +279,12 @@ const ScrollExpand: React.FC<ScrollExpandProps> = ({
             <div
               ref={tintRef}
               className="pointer-events-none absolute inset-0 z-[1]"
-              style={{ backgroundColor: "rgb(194 109 130 / 0.72)" }}
+              style={{ backgroundColor: `rgb(${TINT_RGB} / ${TINT_START})` }}
               aria-hidden="true"
             />
             <div
               ref={scrimRef}
-              className="pointer-events-none absolute inset-0 z-[2] bg-[rgb(194_109_130_/_0.2)] opacity-0"
+              className="pointer-events-none absolute inset-0 z-[2] bg-[rgb(77_49_20_/_0.2)] opacity-0"
             />
             {children ? (
               <div
@@ -294,7 +298,7 @@ const ScrollExpand: React.FC<ScrollExpandProps> = ({
           {title ? (
             <div
               ref={titleRef}
-              className="pointer-events-none absolute inset-0 z-[4] m-0 flex items-center justify-center px-[6%] text-center font-display font-normal uppercase leading-[1.2] tracking-[0.04em] text-theme-black [font-family:var(--font-display)] [font-size:var(--se-title-size)] [will-change:opacity,transform]"
+              className="pointer-events-none absolute inset-0 z-[4] m-0 flex items-center justify-center px-[6%] text-center font-display font-normal uppercase leading-[1.2] tracking-[0.04em] text-theme-white [font-family:var(--font-display)] [font-size:var(--se-title-size)] [will-change:opacity,transform]"
             >
               {title}
             </div>
@@ -302,7 +306,7 @@ const ScrollExpand: React.FC<ScrollExpandProps> = ({
           {scrollHint ? (
             <div
               ref={hintRef}
-              className="pointer-events-none absolute inset-x-0 bottom-5 text-center text-[0.8125rem] tracking-[0.08em] text-theme-black/70 [will-change:opacity,transform]"
+              className="pointer-events-none absolute inset-x-0 bottom-5 text-center text-[0.8125rem] tracking-[0.08em] text-theme-white/70 [will-change:opacity,transform]"
             >
               {scrollHint}
             </div>

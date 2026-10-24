@@ -1,48 +1,127 @@
 ---
 import Badge from "./Badge.astro";
+import Button from "./Button.astro";
 import { GiftSlider } from "./GiftSlider";
 import ScrollReveal from "./ScrollReveal";
 import { site } from "../data/site";
 
-const { gift } = site;
+const { products } = site;
+const { gift, voucher } = products;
 ---
 
 <section
-  id="regalo"
+  id="productos"
   class="bg-theme-black px-5 py-10"
-  aria-labelledby="regalo-title"
+  aria-labelledby="productos-title"
 >
-  <div class="mx-auto flex w-full max-w-lg flex-col items-center gap-8">
+  <div class="mx-auto flex w-full max-w-lg flex-col gap-12 md:max-w-2xl">
     <div class="flex w-full flex-col gap-5 text-theme-white">
-      <p class="kicker" data-scroll-fade>{gift.kicker}</p>
+      <p class="kicker" data-scroll-fade>{products.kicker}</p>
       <ScrollReveal
         client:visible
         as="h2"
-        id="regalo-title"
-        text={gift.title}
+        id="productos-title"
+        text={products.title}
         textClassName="text-5xl font-semibold leading-[1.15] md:text-6xl"
       />
       <ScrollReveal
         client:visible
         as="p"
-        text={gift.intro}
+        text={products.intro}
         textClassName="text-lg font-normal leading-7"
       />
-      <div class="flex flex-wrap gap-5" data-scroll-fade>
-        {gift.badges.map((label) => <Badge label={label} variant="accent2" />)}
+    </div>
+
+    <div class="flex w-full flex-col gap-8" aria-labelledby="tarjeta-regalo-title">
+      <div class="flex w-full flex-col gap-5 text-theme-white">
+        <p class="kicker" data-scroll-fade>{gift.kicker}</p>
+        <ScrollReveal
+          client:visible
+          as="h3"
+          id="tarjeta-regalo-title"
+          text={gift.title}
+          textClassName="text-3xl font-semibold leading-[1.2] md:text-4xl"
+        />
+        <ScrollReveal
+          client:visible
+          as="p"
+          text={gift.intro}
+          textClassName="text-lg font-normal leading-7"
+        />
+        <div class="flex flex-wrap gap-5" data-scroll-fade>
+          {gift.badges.map((label) => <Badge label={label} variant="accent2" />)}
+        </div>
+      </div>
+
+      <div class="w-full" data-scroll-fade>
+        <GiftSlider client:load slides={gift.slides} />
+      </div>
+
+      <div class="flex w-full flex-col gap-6 text-theme-white" data-scroll-fade>
+        <p class="text-base font-normal leading-6">{gift.body}</p>
+
+        <div class="flex flex-col gap-3">
+          <p class="text-base font-semibold leading-6">{gift.howTitle}</p>
+          <ul class="list-disc space-y-1.5 pl-5 text-base font-normal leading-6">
+            {gift.howOptions.map((option) => <li>{option}</li>)}
+          </ul>
+        </div>
+
+        <p class="text-base font-normal leading-6">{gift.validity}</p>
+
+        <div class="border-t border-theme-white/25 pt-6">
+          <p class="text-base font-normal leading-6">{gift.closing}</p>
+        </div>
+
+        <Button
+          href={gift.ctaHref}
+          label={gift.ctaLabel}
+          variant="secondary"
+          class="w-fit self-start"
+        />
       </div>
     </div>
 
-    <div class="w-full" data-scroll-fade>
-      <GiftSlider client:load slides={gift.slides} ctaHref={site.cta.href} />
-    </div>
+    <div
+      class="flex w-full flex-col gap-6 border-t border-accent/40 pt-12"
+      aria-labelledby="bono-title"
+    >
+      <div class="flex w-full flex-col gap-5 text-theme-white">
+        <p class="kicker" data-scroll-fade>{voucher.kicker}</p>
+        <ScrollReveal
+          client:visible
+          as="h3"
+          id="bono-title"
+          text={voucher.title}
+          textClassName="text-3xl font-semibold leading-[1.2] md:text-4xl"
+        />
+        <ScrollReveal
+          client:visible
+          as="p"
+          text={voucher.intro}
+          textClassName="text-lg font-normal leading-7"
+        />
+        <div class="flex flex-wrap gap-5" data-scroll-fade>
+          {voucher.badges.map((label) => <Badge label={label} variant="accent2" />)}
+        </div>
+      </div>
 
-    <ScrollReveal
-      client:visible
-      as="p"
-      containerClassName="w-full"
-      text={gift.note}
-      textClassName="text-base font-normal leading-6 text-theme-white"
-    />
+      <ScrollReveal
+        client:visible
+        as="p"
+        containerClassName="w-full"
+        text={voucher.note}
+        textClassName="text-base font-normal leading-6 text-theme-white"
+      />
+
+      <div data-scroll-fade>
+        <Button
+          href={voucher.ctaHref}
+          label={voucher.ctaLabel}
+          variant="secondary"
+          class="w-fit"
+        />
+      </div>
+    </div>
   </div>
 </section>

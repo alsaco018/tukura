@@ -16,11 +16,12 @@ export const ServicesStack = ({ services }: ServicesStackProps) => (
     useWindowScroll
     smoothScroll={false}
     itemDistance={72}
-    itemStackDistance={18}
-    stackPosition="16%"
+    itemStackDistance={12}
+    stackPosition="72px"
     itemScale={0.04}
     baseScale={0.9}
     dimAmount={0.12}
+    maxVisible={3}
     holdDistance={160}
     className="mx-auto w-full"
   >
@@ -34,10 +35,10 @@ export const ServicesStack = ({ services }: ServicesStackProps) => (
         >
           <a
             href={href}
-            className="group flex w-full flex-col overflow-hidden focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+            className="group flex h-full min-h-0 w-full flex-col overflow-hidden focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
             aria-label={`Ver detalle de ${service.title}`}
           >
-            <div className="relative aspect-[16/9] w-full overflow-hidden sm:aspect-[2/1]">
+            <div className="relative aspect-[16/9] w-full shrink-0 overflow-hidden sm:aspect-[2/1]">
               <img
                 src={service.image}
                 alt=""
@@ -47,8 +48,8 @@ export const ServicesStack = ({ services }: ServicesStackProps) => (
                 loading="lazy"
               />
             </div>
-            <div className="flex flex-col gap-6 p-6 sm:p-8">
-              <div className="flex flex-col gap-4 text-left text-theme-black">
+            <div className="flex min-h-0 flex-1 flex-col gap-6 p-6 sm:p-8">
+              <div className="flex flex-1 flex-col gap-4 text-left text-theme-black">
                 <p className="kicker">{service.kicker}</p>
                 <h3 className="text-2xl font-semibold leading-8 sm:text-[28px] sm:leading-9">
                   {service.title}
@@ -57,7 +58,7 @@ export const ServicesStack = ({ services }: ServicesStackProps) => (
                   {service.description}
                 </p>
               </div>
-              <div className="flex flex-wrap gap-2">
+              <div className="mt-auto flex flex-wrap gap-2">
                 <ServiceBadge label={service.price} />
                 <ServiceBadge label={service.duration} />
               </div>

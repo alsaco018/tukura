@@ -30,5 +30,9 @@ jobs:
             cd /opt/tukura
             git fetch origin main
             git reset --hard origin/main
+            if [ ! -f .env ]; then
+              echo "Missing /opt/tukura/.env with GIFT_AUTH_PASSWORD" >&2
+              exit 1
+            fi
             docker compose up -d --build --remove-orphans
             docker image prune -f

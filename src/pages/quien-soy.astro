@@ -1,0 +1,23 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import HistoriaProfile from "../components/HistoriaProfile.astro";
+import Footer from "../components/Footer.astro";
+import { site } from "../data/site";
+import { historia } from "../data/historia";
+import { buildLocalBusinessJsonLd } from "../lib/seo";
+---
+
+<BaseLayout
+  title={`Quién soy | Patri Guillén — ${site.name}`}
+  description="Patri Guillén, educadora social y quiromasajista en Jerez de la Frontera. Conoce a la persona detrás de TUKURA y su forma de acompañarte en cada sesión."
+  canonicalPath="/quien-soy"
+  image={historia.profile.image}
+  jsonLd={buildLocalBusinessJsonLd()}
+>
+  <Header />
+  <main id="main-content">
+    <HistoriaProfile />
+  </main>
+  <Footer />
+</BaseLayout>

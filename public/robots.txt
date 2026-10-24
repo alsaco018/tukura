@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+Disallow: /mantenimiento
+
+Sitemap: https://tukura.es/sitemap-index.xml

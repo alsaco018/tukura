@@ -1,14 +1,39 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import MaintenanceCover from "../components/MaintenanceCover.astro";
+import Header from "../components/Header.astro";
+import Hero from "../components/Hero.astro";
+import Services from "../components/Services.astro";
+import About from "../components/About.astro";
+import Story from "../components/Story.astro";
+import Space from "../components/Space.astro";
+import Gift from "../components/Gift.astro";
+import Contact from "../components/Contact.astro";
+import Faq from "../components/Faq.astro";
+import Footer from "../components/Footer.astro";
 import { site } from "../data/site";
+import {
+  buildFaqJsonLd,
+  buildLocalBusinessJsonLd,
+  buildWebSiteJsonLd,
+} from "../lib/seo";
 ---
 
 <BaseLayout
-  title={`${site.name} — Próximamente`}
-  description="Estamos trabajando en la web de TUKURA. Mientras tanto, contacta por WhatsApp para pedir cita."
+  title={site.seo.defaultTitle}
+  description={site.seo.defaultDescription}
+  canonicalPath="/"
+  jsonLd={[buildWebSiteJsonLd(), buildLocalBusinessJsonLd(), buildFaqJsonLd()]}
 >
-  <main id="main-content" class="h-dvh w-full overflow-hidden">
-    <MaintenanceCover />
+  <Header />
+  <main id="main-content">
+    <Hero />
+    <Services />
+    <About />
+    <Story />
+    <Space />
+    <Gift />
+    <Faq />
+    <Contact />
   </main>
+  <Footer />
 </BaseLayout>

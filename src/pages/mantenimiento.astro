@@ -1,0 +1,16 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import MaintenanceCover from "../components/MaintenanceCover.astro";
+import { site } from "../data/site";
+---
+
+<BaseLayout
+  title={`${site.name} — Próximamente`}
+  description="Estamos trabajando en la web de TUKURA. Mientras tanto, contacta por WhatsApp para pedir cita."
+  canonicalPath="/mantenimiento"
+  noindex={true}
+>
+  <main id="main-content" class="h-dvh w-full overflow-hidden">
+    <MaintenanceCover />
+  </main>
+</BaseLayout>

@@ -1,12 +1,27 @@
 export const site = {
   name: "TUKURA",
+  url: "https://tukura.es",
   tagline: "Tu cuerpo te está pidiendo una",
   displayWord: "pausa",
   description:
-    "Centro de masajes y bienestar. Un espacio seguro y amable para bajar el ritmo y recibir cuidado.",
+    "Masajes y bienestar en Jerez de la Frontera. Un espacio seguro para bajar el ritmo, escucharte y recibir cuidado. Sin prisa, habitando tu cuerpo.",
+  /** Visible hero body — location keywords live in title, meta and H1 (sr-only). */
+  heroDescription:
+    "Un espacio seguro para bajar el ritmo, escucharte y recibir cuidado. Sin prisa, habitando tu cuerpo.",
+  seo: {
+    defaultTitle: "TUKURA | Masajes y bienestar en Jerez de la Frontera",
+    defaultDescription:
+      "Centro de masajes y bienestar en Jerez de la Frontera. Quiromasaje personalizado, ritual holístico, prenatal y Kobido facial con Patri Guillén en Centro Apófisis.",
+    ogImage: "/images/hero.png",
+    locale: "es_ES",
+    geo: {
+      latitude: 36.678793,
+      longitude: -6.1289674,
+    },
+  },
   cta: {
-    label: "Reserva",
-    href: "/inicio#contacto",
+    label: "Reserva tu momento",
+    href: "/#contacto",
   },
   contact: {
     email: "info@tukura.es",
@@ -17,7 +32,7 @@ export const site = {
       label: "@tukura_bienestar",
       href: "https://instagram.com/tukura_bienestar",
     },
-    address: "C/ Madre de Dios, n° 7. Centro Apófisis.",
+    address: "C/ Madre de Dios, n° 7. Centro Apófisis. Jerez de la Frontera.",
     mapUrl:
       "https://www.google.com/maps/place/Centro+Ap%C3%B3fisis+Osteopat%C3%ADa+y+Terapias+manuales+%7C+Jerez/@36.6785886,-6.1304426,18z/data=!4m6!3m5!1s0xd0dc6ed46a3685f:0xe58d825844fc4d42!8m2!3d36.678793!4d-6.1289674!16s%2Fg%2F1tfyfv2d",
     mapEmbedUrl:
@@ -43,26 +58,22 @@ export const site = {
     },
   ],
   nav: [
-    { label: "Nuestros servicios", href: "/inicio#servicios" },
-    { label: "Quién soy", href: "/historia" },
+    { label: "Nuestros servicios", href: "/#servicios" },
+    { label: "Quién soy", href: "/quien-soy" },
     { label: "Nuestra historia", href: "/historia" },
-    { label: "El espacio", href: "/inicio#espacio" },
-    { label: "Tarjeta regalo", href: "/inicio#regalo" },
-    { label: "Contacta con nosotros", href: "/inicio#contacto" },
+    { label: "El espacio", href: "/#espacio" },
+    { label: "Productos especiales", href: "/#productos" },
+    { label: "Contacta con nosotros", href: "/#contacto" },
   ],
   footerNav: [
-    { label: "Servicios", href: "/inicio#servicios" },
-    { label: "Quién soy", href: "/historia" },
+    { label: "Servicios", href: "/#servicios" },
+    { label: "Quién soy", href: "/quien-soy" },
     { label: "Nuestra historia", href: "/historia" },
-    { label: "El espacio", href: "/inicio#espacio" },
-    { label: "Tarjeta regalo", href: "/inicio#regalo" },
+    { label: "El espacio", href: "/#espacio" },
+    { label: "Productos especiales", href: "/#productos" },
   ],
-  legal: [
-    { label: "Privacidad", href: "#" },
-    { label: "Aviso legal", href: "#" },
-    { label: "Cookies", href: "#" },
-  ],
-  address: "C/ Madre de Dios, n° 7. Centro Apófisis.",
+  /** Legal footer links are rendered by LegalLinks (see src/data/legal.ts). */
+  address: "C/ Madre de Dios, n° 7. Centro Apófisis. Jerez de la Frontera.",
   maintenance: {
     kicker: "Carta de masajes",
     title: "Estamos preparando la web",
@@ -71,10 +82,12 @@ export const site = {
   },
   about: {
     kicker: "quién soy",
-    name: "Patricia Guillén",
-    body: "Educadora Social y Quiromasajista, durante los últimos años he acompañado a personas y familias en momentos vitales complejos. En este camino fui descubriendo algo que despertó en mí una gran curiosidad: cómo todo lo que vivimos, lo que sentimos y aquello que sostenemos día a día también se expresa a través del cuerpo",
-    quote: "“Tu cuerpo también cuenta tu historia”",
+    name: "Patri Guillén",
+    body: "Educadora Social y Quiromasajista. La persona que da vida a TUKURA y te acompañará en cada sesión. Durante los últimos años he acompañado a personas y familias en momentos vitales complejos. En ese camino nació mi curiosidad por comprender cómo todo lo que vivimos y sentimos también se expresa a través del cuerpo.",
+    quote: "“Tu cuerpo también cuenta tu historia.”",
     image: "/images/about.jpg",
+    ctaLabel: "Leer más",
+    ctaHref: "/quien-soy",
   },
   story: {
     kicker: "nuestra historia",
@@ -84,9 +97,8 @@ export const site = {
       { accent: "Sostener", rest: " sin juzgar" },
     ],
     paragraphs: [
-      "Tu cuerpo guarda el estrés diario.",
-      "En TUKURA creamos espacios seguros para bajar el ritmo y recibir cuidado.",
-      "Mediante masajes integrales y tacto consciente, acompañamos a tu cuerpo a aflojar, respirar y recuperar su bienestar.",
+      "TUKURA nace del deseo de crear espacios y momentos más amables y seguros. Lugares donde no tengamos que llegar con todo resuelto, donde podamos parar y descansar.",
+      "Como las tortugas, llevamos nuestro hogar con nosotros: el cuerpo. Un lugar donde se expresa nuestra historia, donde sentimos y vivimos.",
     ],
     ctaLabel: "Leer más",
     ctaHref: "/historia",
@@ -94,10 +106,12 @@ export const site = {
   },
   space: {
     kicker: "el espacio",
-    title: "Un lugar donde relajarte",
+    title: "Aquí se respira la calma",
     paragraphs: [
-      "El ritmo diario, el estrés y el cansancio se reflejan en el cuerpo: hombros tensos, mandíbula apretada o fatiga. De esa necesidad de pausa nace TUKURA, un espacio seguro y amable para bajar el ritmo y recibir cuidado sin tener que resolverlo todo",
-      "Entendemos el masaje desde una mirada integral, viendo el cuerpo como un todo. Mediante el tacto consciente y la escucha, acompañamos a tu cuerpo a aflojar, respirar y recuperar su bienestar",
+      "Desde que entras, todo te invita a bajar el ritmo. Una luz suave, colores claros, pequeños detalles naturales, un aroma que te recibe y una música que acompaña sin imponerse.",
+      "Cada elemento está pensado para crear una atmósfera acogedora, cuidar tus sentidos y ayudarte a dejar fuera, por un momento, el ruido y las prisas del día a día.",
+      "Aquí no tienes que hacer nada. Solo llegar, respirar y dejarte cuidar. Muchas personas me cuentan que la tranquilidad se siente desde el primer momento y que, al terminar, se van con el cuerpo más ligero. Algunas, incluso, flotando.",
+      "Y, sobre todo, quiero que te sientas a gusto y con la confianza de expresar lo que necesitas. Puedes cambiar de postura, pedirme que ajuste la presión o que cambie la música. Si algo no te resulta cómodo, dímelo. Tu voz importa y quiero que sientas que tienes la libertad de compartir cómo estás en cada momento.",
     ],
     images: [
       "/images/space-1.png",
@@ -105,29 +119,49 @@ export const site = {
       "/images/space-3.png",
     ],
   },
-  gift: {
-    kicker: "Tarjeta regalo",
-    title: "Regala bienestar",
-    intro: "Un regalo que cuida. Elige una experiencia o deja que la persona elija",
-    badges: ["Digital", "Recoger en el centro"],
-    slides: [
-      {
-        kicker: "Elije tu regalo",
-        title: "Regala un masaje",
-        description:
-          "Regala bienestar, elige el quiromasaje relajante perfecto para sorprender a quien tú quieras",
-        ctaLabel: "Reserva",
-        image: "/images/gift-slider.png",
-      },
-      {
-        kicker: "Elije el importe",
-        title: "Tarjeta a tu medida",
-        description:
-          "Válida para cualquier servicio. Tú eliges el importe y la persona decide su momento de bienestar",
-        ctaLabel: "Reserva",
-        image: "/images/gift-slider.png",
-      },
-    ],
-    note: "Las tarjetas regalo digitales se envían por email o WhatsApp, listas para regalar. También puedes recogerlas impresas en el centro. Válidas durante 6 meses",
+  products: {
+    kicker: "Productos especiales",
+    title: "Cuidados para ti o para regalar",
+    intro:
+      "Además de las sesiones sueltas, en TUKURA puedes regalar un masaje o reservar un bono para acompañarte a lo largo del tiempo.",
+    gift: {
+      kicker: "Tarjeta regalo",
+      title: "Ese regalo que sabes que le va a encantar",
+      intro:
+        "Para esa persona que nunca encuentra un momento para sí, que lleva demasiadas cosas en la cabeza o que disfruta de un buen masaje. Un masaje es de esos regalos que no se quedan guardados en un cajón. Se disfrutan, se sienten y se recuerdan.",
+      badges: ["Digital", "Recoger en el centro"],
+      slides: [
+        {
+          title: "Tarjeta regalo TUKURA",
+          image: "/images/gift-slider.png",
+        },
+      ],
+      body: "En TUKURA puedes elegir uno de nuestros masajes o regalar el importe que prefieras, para que esa persona decida cuál le apetece más.",
+      howTitle: "¿Cómo puedes conseguirla?",
+      howOptions: [
+        "Digital: te la envío por email o WhatsApp, lista para regalar.",
+        "Física: puedes recogerla en el centro y entregarla en persona.",
+      ],
+      validity:
+        "Las tarjetas regalo tienen una validez de 6 meses desde la fecha de compra.",
+      closing: "¿Ya estás pensando en alguien?",
+      ctaLabel: "Reserva tu tarjeta regalo",
+      ctaHref: "/tarjeta-regalo",
+    },
+    voucher: {
+      kicker: "Bono de sesiones",
+      title: "Bono de 5 sesiones",
+      intro:
+        "Para quien quiere cuidarse con continuidad. Un bono de 5 sesiones a un precio especial, para que vuelvas cuando lo necesites y mantengas el bienestar a lo largo del tiempo.",
+      badges: ["200€", "5 sesiones"],
+      note: "El bono es personal y tiene una validez de 6 meses desde la fecha de compra. Puedes usarlo en cualquiera de nuestros masajes.",
+      ctaLabel: "Reserva tu bono",
+      ctaHref: "/#contacto",
+    },
+  },
+  servicesIntro: {
+    kicker: "Nuestros servicios",
+    title: "Dedícate un momento",
+    subtitle: "Cada masaje se adapta a ti y a cómo llegas hoy.",
   },
 } as const;

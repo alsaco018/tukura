@@ -6,8 +6,12 @@ Sitio web de TUKURA masajes (Astro + React + Tailwind CSS 4).
 
 ## Páginas
 
-- `/` — Portada de mantenimiento (página pública)
-- `/inicio` — Homepage completa (en desarrollo)
+- `/` — Homepage (masajes y bienestar)
+- `/quien-soy` — Patri Guillén
+- `/historia` — Nuestra historia
+- `/masajes/[id]` — Ficha de cada servicio
+- `/mantenimiento` — Portada “próximamente” (noindex)
+- `/tarjeta-regalo` — Experiencia de tarjeta regalo (Basic Auth + noindex)
 
 ## Desarrollo local
 
@@ -17,7 +21,7 @@ npm run dev
 ```
 
 - `http://localhost:4322/`
-- `http://localhost:4322/inicio`
+- `http://localhost:4322/historia`
 
 ## Deploy (Hostinger VPS + Nginx del host)
 
@@ -33,10 +37,14 @@ Internet → Nginx (80/443) → 127.0.0.1:8082 → contenedor tukura:80
 ```bash
 git clone https://github.com/alsaco018/tukura.git /opt/tukura
 cd /opt/tukura
+cp .env.example .env   # define GIFT_AUTH_USER / GIFT_AUTH_PASSWORD
 docker compose up -d --build
 ```
 
-Comprueba: `curl -I http://127.0.0.1:8082`
+`/tarjeta-regalo/` está protegida con HTTP Basic Auth (credenciales del `.env`).
+
+Comprueba: `curl -I http://127.0.0.1:8082`  
+Auth: `curl -I -u usuario:clave http://127.0.0.1:8082/tarjeta-regalo/`
 
 ### 2. Nginx
 

@@ -3,7 +3,7 @@
   "type": "module",
   "version": "1.0.0",
   "engines": {
-    "node": ">=22.12.0"
+    "node": ">=22.23.4"
   },
   "scripts": {
     "dev": "astro dev --port 4322 --host",
@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@astrojs/react": "^6.0.5",
+    "@astrojs/sitemap": "^3.7.4",
     "@hugeicons/core-free-icons": "^4.3.5",
     "@hugeicons/react": "^1.1.10",
     "@tailwindcss/vite": "^4.3.3",
@@ -20,11 +21,14 @@
     "gsap": "^3.15.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
-    "tailwindcss": "^4.3.3"
+    "tailwindcss": "^4.3.3",
+    "vanilla-cookieconsent": "^3.1.0"
   },
   "devDependencies": {
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
+    "pdfkit": "^0.20.2",
+    "playwright": "^1.64.1",
     "typescript": "^5.9.3"
   },
   "optionalDependencies": {

@@ -1,5 +1,9 @@
 # Host Nginx reverse-proxies to this published localhost port.
 # tukura → 127.0.0.1:8082
+#
+# Gift-card Basic Auth — set in .env (see .env.example):
+#   GIFT_AUTH_USER=tukura
+#   GIFT_AUTH_PASSWORD=...
 services:
   tukura:
     build: .
@@ -7,3 +11,6 @@ services:
     restart: unless-stopped
     ports:
       - "127.0.0.1:8082:80"
+    environment:
+      GIFT_AUTH_USER: ${GIFT_AUTH_USER:-tukura}
+      GIFT_AUTH_PASSWORD: ${GIFT_AUTH_PASSWORD:?Set GIFT_AUTH_PASSWORD in .env}

@@ -161,3 +161,6 @@ body {
     will-change: opacity;
   }
 }
+
+/* Cookieconsent brand theme lives in cookieconsent-theme.css
+   (imported after the library CSS in CookieConsentInit). */

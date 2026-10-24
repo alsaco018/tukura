@@ -5,6 +5,7 @@ import ServiceDetail from "../../components/ServiceDetail.astro";
 import Footer from "../../components/Footer.astro";
 import { getServiceById, services } from "../../data/services";
 import { site } from "../../data/site";
+import { buildServiceJsonLd } from "../../lib/seo";
 
 export function getStaticPaths() {
   return services.map((service) => ({
@@ -16,13 +17,19 @@ const { id } = Astro.params;
 const service = getServiceById(id ?? "");
 
 if (!service) {
-  return Astro.redirect("/inicio#servicios");
+  return Astro.redirect("/#servicios");
 }
+
+const title = `${service.title} en Jerez | ${site.name}`;
+const description = `${service.title} en TUKURA (Jerez de la Frontera). ${service.duration} desde ${service.price}. Reserva tu sesión con Patri Guillén.`;
 ---
 
 <BaseLayout
-  title={`${service.title} — ${site.name}`}
-  description={service.description}
+  title={title}
+  description={description}
+  canonicalPath={`/masajes/${service.id}`}
+  image={service.image}
+  jsonLd={buildServiceJsonLd(service)}
 >
   <Header />
   <main id="main-content">

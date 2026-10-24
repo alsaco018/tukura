@@ -18,7 +18,7 @@ export const carta = {
     greeting: "¡Hola! Soy Patri Guillén",
     body: [
       "Educadora Social y Quiromasajista, la persona que da vida a TUKURA y quien te acompañará en cada sesión.",
-      "Fue de ahí donde empezó a nacer TUKURA: de un anhelo de crear espacios y momentos más amables y seguros. Donde podamos bajar el ritmo, escuchar lo que necesitamos y permitirnos recibir cuidado.",
+      "TUKURA nace del deseo de crear espacios y momentos más amables y seguros. Lugares donde no tengamos que llegar con todo resuelto, donde podamos parar y descansar.",
     ],
     principles: [
       "Acompañar sin imponer.",
@@ -31,53 +31,54 @@ export const carta = {
     {
       id: "personalizado",
       title: "Masaje personalizado",
+      lead: "Escucha a tu cuerpo",
       description:
-        "Parte de ti y de lo que tu cuerpo necesita ahora: liberar tensión, favorecer la movilidad o recuperar ligereza. Combinamos técnicas de quiromasaje, zonas, presiones y ritmos allí donde más lo necesitas.",
+        "Hay días en los que sabes exactamente dónde se acumula la tensión: los hombros tras horas frente al ordenador, la espalda tras la jornada, las piernas tras entrenar. Trabajo esa zona para liberar tensión acumulada, favorecer la movilidad y devolverte ligereza. Te vas con el cuerpo más suelto y con una sensación de alivio.",
       price: "45 €",
       duration: "60 minutos",
     },
     {
       id: "ritual",
       title: "Ritual corporal holístico",
-      lead: "La esencia de TUKURA.",
+      lead: "La esencia de TUKURA",
       description:
-        "Un recorrido de cuerpo completo, de pies a cabeza. Una experiencia envolvente para bajar el ritmo, dejar atrás el ruido externo y sumergirte en una profunda sensación de calma.",
+        "Un recorrido de cuerpo completo, de los pies a la cabeza. Un espacio para bajar el ritmo y dejar atrás el ruido externo, mientras notas cómo tu cuerpo va soltando tensión, hasta terminar en una profunda sensación de calma, tranquilidad y paz. Muchas personas se van flotando.",
       price: "55 €",
       duration: "75 minutos",
     },
     {
-      id: "craneofacial",
-      title: "Conexión craneofacial",
-      lead: "Cuando sientes demasiadas responsabilidades en la cabeza.",
+      id: "vertebral",
+      title: "Masaje vertebral",
+      lead: "Tu columna necesita movilidad y expansión",
       description:
-        "Recorre la parte alta de la espalda, hombros, cervicales, nuca, cabeza, mandíbula y rostro. Pensado para soltar y recuperar una relajación profunda.",
+        "Un masaje específico que recorre el eje vertebral, del sacro a la zona occipital, con un trabajo manual más profundo. Busco liberar tensiones, favorecer la descompresión de la columna y mejorar la sensación de movilidad y amplitud. Para sentir la espalda liberada de tensión.",
       price: "45 €",
       duration: "60 minutos",
     },
     {
-      id: "vertebral",
-      title: "Masaje vertebral",
-      lead: "Tu columna necesita movilidad y expansión.",
+      id: "craneofacial",
+      title: "Conexión craneofacial",
+      lead: "Cuando sientes demasiadas responsabilidades en la cabeza",
       description:
-        "Trabajo específico del eje vertebral, del sacro al occipital. Liberamos tensiones, favorecemos la descompresión y mejoramos la sensación de movilidad y amplitud.",
+        "Para cuando cuesta soltar: hombros elevados, nuca cargada, mandíbula apretada. Recorro la parte alta de la espalda, cervicales, cabeza y rostro para que dejes de darle vueltas a todo y llegues a una relajación profunda. Una forma de irte a otro mundo un rato: la mente más quieta y el cuerpo en calma.",
       price: "45 €",
       duration: "60 minutos",
     },
     {
       id: "kobido",
       title: "Kobido facial",
-      lead: "El arte japonés del masaje facial.",
+      lead: "El arte japonés del masaje facial",
       description:
-        "Técnica japonesa sobre piel seca, con movimientos rápidos y drenaje en rostro, cuello, escote y cabeza. Deja el rostro más ligero, despierto y revitalizado.",
+        "Una técnica japonesa sobre piel seca, con movimientos rápidos, rítmicos y precisos, percusiones y drenaje, en rostro, cuello, escote y cabeza. Relaja toda la cara, también la mandíbula, una de las zonas donde más tensión guardamos. El rostro es de las partes más sensibles del cuerpo, y por eso se nota tanto. Deja una sensación de rostro más ligero, despierto y revitalizado.",
       price: "45 €",
       duration: "60 minutos",
     },
     {
       id: "prenatal",
       title: "Masaje prenatal",
-      lead: "Cuidar tu cuerpo durante el embarazo.",
+      lead: "Cuidar tu cuerpo durante el embarazo",
       description:
-        "Sesión específica con posiciones cómodas y un trabajo suave y adaptado, prestando atención a las zonas que acumulan mayor sobrecarga en esta etapa.",
+        "Durante el embarazo la espalda se carga y las piernas pesan más. Una sesión con posiciones cómodas y un trabajo suave y adaptado, con atención a las zonas de mayor sobrecarga, para darte un descanso absoluto.",
       price: "45 €",
       duration: "60 minutos",
     },

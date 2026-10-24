@@ -1,17 +1,39 @@
 ---
 import "../styles/global.css";
+import CookieConsentInit from "../components/CookieConsentInit";
 import PageClickSpark from "../components/PageClickSpark";
 import PageScrollFade from "../components/PageScrollFade";
+import { absoluteUrl } from "../lib/seo";
+import { site } from "../data/site";
 
 interface Props {
   title?: string;
   description?: string;
+  image?: string;
+  canonicalPath?: string;
+  noindex?: boolean;
+  type?: "website" | "article";
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
 }
 
 const {
-  title = "TUKURA — Masajes y bienestar",
-  description = "Centro de masajes y bienestar. Un espacio seguro y amable para bajar el ritmo y recibir cuidado.",
+  title = site.seo.defaultTitle,
+  description = site.seo.defaultDescription,
+  image = site.seo.ogImage,
+  canonicalPath = Astro.url.pathname,
+  noindex = false,
+  type = "website",
+  jsonLd,
 } = Astro.props;
+
+const normalizedPath =
+  canonicalPath === "/"
+    ? "/"
+    : `/${canonicalPath.replace(/^\/+|\/+$/g, "")}/`;
+const canonicalUrl = absoluteUrl(normalizedPath);
+const ogImageUrl = absoluteUrl(image);
+const robots = noindex ? "noindex, nofollow" : "index, follow, max-image-preview:large";
+const jsonLdItems = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 ---
 
 <!doctype html>
@@ -20,10 +42,40 @@ const {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
-    <meta name="generator" content={Astro.generator} />
+    <meta name="robots" content={robots} />
+    <meta name="author" content={`${site.name} — ${site.about.name}`} />
     <meta name="theme-color" content="#fbf4ef" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="geo.region" content="ES-CA" />
+    <meta name="geo.placename" content="Jerez de la Frontera" />
+    <meta name="geo.position" content={`${site.seo.geo.latitude};${site.seo.geo.longitude}`} />
+    <meta name="ICBM" content={`${site.seo.geo.latitude}, ${site.seo.geo.longitude}`} />
+
     <title>{title}</title>
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate" hreflang="es" href={canonicalUrl} />
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:type" content={type} />
+    <meta property="og:locale" content={site.seo.locale} />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:alt" content={`${site.name} — masajes y bienestar en Jerez`} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    {
+      jsonLdItems.map((item) => (
+        <script type="application/ld+json" set:html={JSON.stringify(item)} />
+      ))
+    }
+
     <script is:inline>
       document.documentElement.classList.add("js");
     </script>
@@ -36,6 +88,7 @@ const {
       Saltar al contenido
     </a>
     <slot />
+    <CookieConsentInit client:load />
     <PageScrollFade client:load />
     <PageClickSpark client:load />
   </body>

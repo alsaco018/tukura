@@ -6,25 +6,35 @@ const { profile } = historia;
 ---
 
 <section
-  class="bg-accent pt-10 text-theme-white"
-  aria-labelledby="historia-profile-title"
+  class="bg-accent pt-28 text-theme-white"
+  aria-labelledby="quien-soy-page-title"
 >
-  <div class="mx-auto flex w-full max-w-lg flex-col gap-6 px-5">
+  <div class="mx-auto flex w-full max-w-lg flex-col gap-6 px-5 md:max-w-2xl">
     <div class="flex flex-col gap-5">
       <p class="kicker" data-scroll-fade>{profile.kicker}</p>
       <ScrollReveal
         client:visible
-        as="h2"
-        id="historia-profile-title"
+        as="h1"
+        id="quien-soy-page-title"
         text={profile.name}
         textClassName="text-5xl font-semibold leading-[1.15] md:text-6xl"
       />
       <ScrollReveal
         client:visible
         as="p"
-        text={profile.body}
+        text={profile.role}
         textClassName="text-lg font-normal leading-7"
       />
+      {
+        profile.paragraphs.map((paragraph) => (
+          <ScrollReveal
+            client:visible
+            as="p"
+            text={paragraph}
+            textClassName="text-lg font-normal leading-7"
+          />
+        ))
+      }
     </div>
 
     <blockquote class="border-l-2 border-theme-white pl-6">
@@ -35,12 +45,28 @@ const { profile } = historia;
         textClassName="text-xl italic leading-[28px]"
       />
     </blockquote>
+
+    <div class="flex flex-col gap-3">
+      <p class="kicker" data-scroll-fade>{profile.formation.kicker}</p>
+      <ScrollReveal
+        client:visible
+        as="p"
+        text={profile.formation.items}
+        textClassName="text-lg font-normal leading-7"
+      />
+      <ScrollReveal
+        client:visible
+        as="p"
+        text={profile.formation.note}
+        textClassName="text-lg font-normal leading-7"
+      />
+    </div>
   </div>
 
   <div class="mt-6 h-[353px] w-full overflow-hidden" data-scroll-fade>
     <img
       src={profile.image}
-      alt="Patricia Guillén en un ambiente de bienestar"
+      alt="Patri Guillén en un ambiente de bienestar"
       class="h-full w-full object-cover"
       width="786"
       height="706"

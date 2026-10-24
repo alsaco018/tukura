@@ -1,0 +1,57 @@
+/* Loaded after vanilla-cookieconsent.css so these overrides win. */
+
+#cc-main {
+  --cc-font-family: var(--font-sans);
+  --cc-bg: var(--color-brand-light);
+  --cc-primary-color: var(--color-theme-black);
+  --cc-secondary-color: color-mix(in srgb, var(--color-theme-black) 72%, transparent);
+  --cc-btn-primary-bg: var(--color-accent);
+  --cc-btn-primary-color: var(--color-theme-white);
+  --cc-btn-primary-border-color: var(--color-accent);
+  --cc-btn-primary-hover-bg: color-mix(in srgb, var(--color-accent) 88%, #000);
+  --cc-btn-primary-hover-color: var(--color-theme-white);
+  --cc-btn-primary-hover-border-color: color-mix(in srgb, var(--color-accent) 88%, #000);
+  --cc-btn-secondary-bg: var(--color-theme-white);
+  --cc-btn-secondary-color: var(--color-theme-black);
+  --cc-btn-secondary-border-color: color-mix(in srgb, var(--color-theme-black) 18%, transparent);
+  --cc-btn-secondary-hover-bg: var(--color-brand-medium);
+  --cc-btn-secondary-hover-color: var(--color-theme-black);
+  --cc-btn-secondary-hover-border-color: color-mix(in srgb, var(--color-theme-black) 28%, transparent);
+  --cc-toggle-on-bg: var(--color-accent);
+  --cc-toggle-off-bg: color-mix(in srgb, var(--color-theme-black) 22%, transparent);
+  --cc-toggle-readonly-bg: color-mix(in srgb, var(--color-theme-black) 18%, transparent);
+  --cc-toggle-on-knob-bg: var(--color-theme-white);
+  --cc-toggle-off-knob-bg: var(--color-theme-white);
+  --cc-cookie-category-block-bg: var(--color-brand-medium);
+  --cc-cookie-category-block-border: transparent;
+  --cc-cookie-category-block-hover-bg: var(--color-neutral-medium);
+  --cc-cookie-category-block-hover-border: transparent;
+  --cc-section-border: color-mix(in srgb, var(--color-accent) 35%, transparent);
+  --cc-overlay-bg: color-mix(in srgb, var(--color-theme-black) 45%, transparent);
+  --cc-footer-bg: var(--color-brand-medium);
+  --cc-footer-color: var(--color-theme-black);
+  --cc-link-color: var(--color-accent-2);
+  /* Shared by section cards — keep moderate. */
+  --cc-btn-border-radius: 0.75rem;
+  --cc-modal-border-radius: 1rem;
+}
+
+/* Pill / circular buttons — must beat library selectors */
+#cc-main button.cm__btn,
+#cc-main button.pm__btn,
+#cc-main button.pm__close-btn {
+  border-radius: 9999px !important;
+}
+
+/* Category rows: pill when collapsed; moderate radius when open (avoids clipping text) */
+#cc-main .pm__section--toggle:not(.is-expanded) .pm__section-title {
+  border-radius: 9999px !important;
+}
+
+#cc-main .pm__section--toggle.is-expanded .pm__section-title {
+  border-radius: 0.75rem 0.75rem 0 0 !important;
+}
+
+#cc-main .pm__section--toggle.is-expanded .pm__section-desc-wrapper {
+  border-radius: 0 0 0.75rem 0.75rem !important;
+}

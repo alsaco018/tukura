@@ -24,19 +24,30 @@ type MobileNavProps = {
   closeIconSrc?: string;
 };
 
+const PENDING_HASH_KEY = "tukura:pendingHash";
+
 const normalizePath = (path: string): string => {
   if (!path) return "/";
   return path.length > 1 && path.endsWith("/") ? path.slice(0, -1) : path;
 };
 
-const getSamePageHashId = (href: string): string | null => {
+const parseInternalHashLink = (
+  href: string,
+): { pathname: string; search: string; hashId: string; samePage: boolean } | null => {
   try {
     const url = new URL(href, window.location.href);
-    const samePage =
-      url.origin === window.location.origin &&
-      normalizePath(url.pathname) === normalizePath(window.location.pathname);
-    if (!samePage || url.hash.length <= 1) return null;
-    return decodeURIComponent(url.hash.slice(1));
+    if (url.origin !== window.location.origin || url.hash.length <= 1) {
+      return null;
+    }
+    const hashId = decodeURIComponent(url.hash.slice(1));
+    if (!hashId) return null;
+    return {
+      pathname: url.pathname,
+      search: url.search,
+      hashId,
+      samePage:
+        normalizePath(url.pathname) === normalizePath(window.location.pathname),
+    };
   } catch {
     return null;
   }
@@ -158,7 +169,7 @@ export const MobileNav = ({
   nav,
   ctaLabel,
   ctaHref,
-  homeHref = "/inicio",
+  homeHref = "/",
   wordmarkSrc = "/icons/logo-wordmark.svg",
   menuIconSrc = "/icons/menu.svg",
   closeIconSrc = "/icons/close.svg",
@@ -236,17 +247,43 @@ export const MobileNav = ({
     [scrollToSection],
   );
 
+  const navigateToHashOnOtherPage = useCallback(
+    (pathname: string, search: string, hashId: string) => {
+      unlockBodyScroll();
+      skipFocusRef.current = true;
+      setIsOpen(false);
+      // Hand off the section id so the destination page can scroll after layout
+      // (native /#hash often lands short with sticky header + late content).
+      try {
+        sessionStorage.setItem(PENDING_HASH_KEY, hashId);
+      } catch {
+        /* private mode / blocked storage */
+      }
+      const next = `${pathname}${search}#${encodeURIComponent(hashId)}`;
+      window.setTimeout(() => {
+        window.location.assign(next);
+      }, 40);
+    },
+    [],
+  );
+
   const handleHashNavigate = (
     event: ReactMouseEvent<HTMLAnchorElement>,
   ): boolean => {
     const href = event.currentTarget.getAttribute("href");
     if (!href) return false;
 
-    const targetId = getSamePageHashId(href);
-    if (!targetId) return false;
+    const parsed = parseInternalHashLink(href);
+    if (!parsed) return false;
 
     event.preventDefault();
-    queueOrScrollTo(targetId);
+
+    if (parsed.samePage) {
+      closeOrScrollTo(parsed.hashId);
+      return true;
+    }
+
+    navigateToHashOnOtherPage(parsed.pathname, parsed.search, parsed.hashId);
     return true;
   };
 
@@ -281,6 +318,35 @@ export const MobileNav = ({
     };
   }, [isOpen]);
 
+  // After cross-page hash nav (or cold load with #id), scroll once layout is ready.
+  useEffect(() => {
+    let pending: string | null = null;
+    try {
+      pending = sessionStorage.getItem(PENDING_HASH_KEY);
+      if (pending) sessionStorage.removeItem(PENDING_HASH_KEY);
+    } catch {
+      pending = null;
+    }
+
+    const fromUrl =
+      window.location.hash.length > 1
+        ? decodeURIComponent(window.location.hash.slice(1))
+        : null;
+    const targetId = pending || fromUrl;
+    if (!targetId) return;
+
+    const timers = [0, 80, 250, 500, 900].map((ms) =>
+      window.setTimeout(() => scrollToSection(targetId), ms),
+    );
+    const onLoad = () => scrollToSection(targetId);
+    window.addEventListener("load", onLoad);
+
+    return () => {
+      timers.forEach((id) => window.clearTimeout(id));
+      window.removeEventListener("load", onLoad);
+    };
+  }, [scrollToSection]);
+
   useEffect(
     () => () => {
       cancelScrollRef.current?.();
@@ -313,10 +379,10 @@ export const MobileNav = ({
             />
           </a>
 
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-2 sm:gap-6">
             <a
               href={ctaHref}
-              className="inline-flex items-center justify-center rounded-full bg-accent px-8 py-2 text-base font-semibold leading-6 text-theme-white transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-lighter"
+              className="inline-flex items-center justify-center whitespace-nowrap rounded-full bg-accent px-4 py-2 text-sm font-semibold leading-5 text-theme-white transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent-lighter sm:px-8 sm:text-base sm:leading-6"
               target={ctaIsExternal ? "_blank" : undefined}
               rel={ctaIsExternal ? "noopener noreferrer" : undefined}
               onClick={handleCtaClick}

@@ -21,6 +21,8 @@ export interface ScrollStackProps {
   tiltAmount?: number;
   rotationAmount?: number;
   holdDistance?: number;
+  /** Max cards kept visible in the stack; older ones fade out as newer ones enter. */
+  maxVisible?: number;
   smoothScroll?: boolean;
   snap?: boolean;
   useWindowScroll?: boolean;
@@ -38,6 +40,7 @@ interface StackSettings {
   tiltAmount: number;
   rotationAmount: number;
   holdDistance: number;
+  maxVisible: number;
   smoothScroll: boolean;
   snap: boolean;
   onStackComplete?: () => void;
@@ -75,7 +78,7 @@ export const ScrollStackItem = ({
   style,
 }: ScrollStackItemProps) => (
   <div
-    className={`relative box-border w-full origin-top overflow-hidden will-change-transform ${itemClassName}`.trim()}
+    className={`relative box-border flex w-full origin-top flex-col overflow-hidden will-change-transform ${itemClassName}`.trim()}
     style={{ boxShadow: CARD_SHADOW, ...style }}
   >
     {children}
@@ -99,6 +102,7 @@ const ScrollStack = ({
   tiltAmount = 0,
   rotationAmount = 0,
   holdDistance = 200,
+  maxVisible = 3,
   smoothScroll = true,
   snap = false,
   useWindowScroll = false,
@@ -123,6 +127,7 @@ const ScrollStack = ({
       tiltAmount,
       rotationAmount,
       holdDistance,
+      maxVisible: Math.max(1, Math.floor(maxVisible)),
       smoothScroll,
       snap,
       onStackComplete
@@ -168,12 +173,33 @@ const ScrollStack = ({
       return true;
     };
 
+    const readSlots = () =>
+      (Array.from(inner.children) as HTMLElement[]).filter(child => child.hasAttribute('data-stack-slot'));
+
+    // Match every card to the tallest natural height (runs on resize, not every scroll frame).
+    let equalizing = false;
+    const equalizeHeights = () => {
+      if (equalizing) return;
+      const slots = readSlots();
+      if (!slots.length) return;
+      equalizing = true;
+      const cards = slots.map(slot => slot.firstElementChild as HTMLElement | null);
+      cards.forEach(card => {
+        if (card) card.style.height = '';
+      });
+      const equalHeight = Math.max(0, ...cards.map(card => card?.offsetHeight ?? 0));
+      cards.forEach(card => {
+        if (!card) return;
+        card.style.height = equalHeight > 0 ? `${equalHeight}px` : '';
+      });
+      cache.set('equalHeight', equalHeight);
+      equalizing = false;
+    };
+
     const update = () => {
       frame = 0;
       const settings = settingsRef.current;
-      const slots = (Array.from(inner.children) as HTMLElement[]).filter(child =>
-        child.hasAttribute('data-stack-slot')
-      );
+      const slots = readSlots();
       if (!settings || !slots.length) return;
 
       const viewHeight = windowed ? window.innerHeight : root.clientHeight;
@@ -203,22 +229,46 @@ const ScrollStack = ({
       });
       reach = Math.max(40, (heights[0] + settings.itemDistance - offset) / 2);
 
-      const depths = slots.map(() => 0);
+      const visibleLimit = settings.maxVisible;
+      const covers = slots.map(() => 0);
       let lastCover = 0;
       for (let j = 1; j < slots.length; j++) {
-        const pinBefore = viewTop + stackTop + (j - 1) * offset;
-        const start = pinBefore + heights[j - 1];
+        // Measure cover against the collapsed stack pin (at most visibleLimit slots deep).
+        const pinSlots = Math.min(j, visibleLimit);
+        const pinBefore = viewTop + stackTop + (pinSlots - 1) * offset;
+        const start = pinBefore + heights[Math.min(j - 1, heights.length - 1)];
         const span = Math.max(1, start - pinBefore - offset);
         const cover = Math.min(1, Math.max(0, (start - tops[j]) / span));
-        for (let i = 0; i < j; i++) depths[i] += cover;
+        covers[j] = cover;
         lastCover = cover;
       }
+
+      // Fade card i out as card (i + visibleLimit) enters the stack.
+      const fades = slots.map((_, i) => {
+        const exitAt = i + visibleLimit;
+        return exitAt < slots.length ? covers[exitAt] : 0;
+      });
+
+      const fadedBefore = slots.map((_, i) => {
+        let sum = 0;
+        for (let j = 0; j < i; j++) sum += fades[j];
+        return sum;
+      });
 
       const dimStep = Math.min(Math.max(settings.dimAmount, 0), 1);
       slots.forEach((slot, i) => {
         const card = slot.firstElementChild as HTMLElement | null;
         if (!card) return;
-        const depth = depths[i];
+
+        const opacity = 1 - fades[i];
+        const visualIndex = Math.max(0, i - fadedBefore[i]);
+        // Depth only counts covers from cards still in the visible window.
+        let depth = 0;
+        for (let j = i + 1; j < slots.length; j++) {
+          depth += covers[j] * (1 - fades[j]);
+        }
+        depth = Math.min(depth, visibleLimit - 1);
+
         const lean = Math.min(depth, 1);
         const scale = Math.max(Math.min(settings.baseScale, 1), 1 - depth * settings.itemScale);
         const tilt = -lean * settings.tiltAmount;
@@ -229,6 +279,16 @@ const ScrollStack = ({
           depth < 0.0005
             ? ''
             : `perspective(1200px) rotateX(${tilt.toFixed(2)}deg) rotate(${turn.toFixed(2)}deg) scale(${scale.toFixed(4)})`;
+
+        write(`top${i}`, (stackTop + visualIndex * offset).toFixed(2), value => {
+          slot.style.top = `${value}px`;
+        });
+        // Opacity on the card (not the sticky slot) so sticky positioning stays reliable.
+        write(`opacity${i}`, opacity.toFixed(3), value => {
+          card.style.opacity = value;
+          card.style.pointerEvents = Number(value) < 0.05 ? 'none' : '';
+          slot.setAttribute('aria-hidden', Number(value) < 0.05 ? 'true' : 'false');
+        });
         write(`transform${i}`, transform, value => {
           card.style.transform = value;
         });
@@ -332,16 +392,31 @@ const ScrollStack = ({
       settleSoon();
     };
 
-    const observer = new ResizeObserver(schedule);
+    const onResize = () => {
+      if (equalizing) return;
+      equalizeHeights();
+      schedule();
+    };
+
+    const observer = new ResizeObserver(onResize);
     observer.observe(root);
     observer.observe(inner);
+    readSlots().forEach(slot => {
+      const card = slot.firstElementChild;
+      if (!card) return;
+      // Watch images so lazy-loaded media can grow the shared card height.
+      card.querySelectorAll('img').forEach(img => {
+        if (!img.complete) img.addEventListener('load', onResize, { once: true });
+      });
+    });
     target.addEventListener('scroll', onScroll, { passive: true });
     target.addEventListener('wheel', onWheel, { passive: false });
     target.addEventListener('pointerdown', onPress, { passive: true });
     window.addEventListener('pointerup', onRelease, { passive: true });
     window.addEventListener('pointercancel', onRelease, { passive: true });
-    window.addEventListener('resize', schedule);
+    window.addEventListener('resize', onResize);
     scheduleRef.current = schedule;
+    equalizeHeights();
     update();
 
     return () => {
@@ -354,7 +429,7 @@ const ScrollStack = ({
       target.removeEventListener('pointerdown', onPress);
       window.removeEventListener('pointerup', onRelease);
       window.removeEventListener('pointercancel', onRelease);
-      window.removeEventListener('resize', schedule);
+      window.removeEventListener('resize', onResize);
       scheduleRef.current = null;
     };
   }, [useWindowScroll]);

@@ -13,9 +13,9 @@ type FaqAccordionProps = {
 
 export const FaqAccordion = ({
   items,
-  defaultOpenId = "embarazo",
+  defaultOpenId,
 }: FaqAccordionProps) => {
-  const [openId, setOpenId] = useState<string | null>(defaultOpenId);
+  const [openId, setOpenId] = useState<string | null>(defaultOpenId ?? null);
 
   const handleToggle = (id: string) => {
     setOpenId((current) => (current === id ? null : id));
@@ -30,7 +30,7 @@ export const FaqAccordion = ({
     };
 
   return (
-    <div className="flex w-full flex-col items-center gap-5">
+    <div className="flex w-full flex-col gap-5">
       {items.map((item) => {
         const isOpen = openId === item.id;
         const panelId = `faq-panel-${item.id}`;
@@ -39,7 +39,7 @@ export const FaqAccordion = ({
         return (
           <div
             key={item.id}
-            className="w-full max-w-[353px] overflow-hidden rounded-[40px] bg-theme-white"
+            className="w-full overflow-hidden rounded-[40px] bg-theme-white"
           >
             <button
               id={buttonId}

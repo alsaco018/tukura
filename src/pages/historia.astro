@@ -4,21 +4,23 @@ import Header from "../components/Header.astro";
 import HistoriaHero from "../components/HistoriaHero.astro";
 import HistoriaBody from "../components/HistoriaBody.astro";
 import HistoriaPrinciples from "../components/HistoriaPrinciples.astro";
-import HistoriaProfile from "../components/HistoriaProfile.astro";
 import Footer from "../components/Footer.astro";
 import { site } from "../data/site";
+import { buildLocalBusinessJsonLd } from "../lib/seo";
 ---
 
 <BaseLayout
-  title={`${site.name} — Nuestra historia`}
-  description="Conoce la historia de TUKURA y de Patricia Guillén: un espacio seguro para bajar el ritmo y recibir cuidado."
+  title={`Nuestra historia | ${site.name} — Masajes en Jerez`}
+  description="Conoce la historia de TUKURA: un espacio seguro en Jerez de la Frontera para bajar el ritmo, descansar y recibir cuidado."
+  canonicalPath="/historia"
+  image={site.about.image}
+  jsonLd={buildLocalBusinessJsonLd()}
 >
   <Header />
   <main id="main-content">
     <HistoriaHero />
     <HistoriaBody />
     <HistoriaPrinciples />
-    <HistoriaProfile />
   </main>
   <Footer />
 </BaseLayout>

@@ -5,14 +5,12 @@ type ServiceScrollExpandProps = {
   image: string;
   kicker: string;
   title: string;
-  lead?: string;
 };
 
 const ServiceScrollExpand = ({
   image,
   kicker,
   title,
-  lead,
 }: ServiceScrollExpandProps) => (
   <ScrollExpand
     src={image}
@@ -33,14 +31,6 @@ const ServiceScrollExpand = ({
       text={title}
       textClassName="max-w-lg font-display text-[44px] font-normal leading-[1.15] text-theme-white [font-family:var(--font-display)] md:text-6xl"
     />
-    {lead ? (
-      <ScrollReveal
-        as="p"
-        text={lead}
-        containerClassName="mt-4 max-w-md"
-        textClassName="font-sans text-xl font-semibold leading-7 text-theme-white"
-      />
-    ) : null}
   </ScrollExpand>
 );
 

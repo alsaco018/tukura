@@ -6,11 +6,11 @@ import { faqItems } from "../data/faq";
 
 <section
   id="faq"
-  class="bg-theme-black px-5 py-8 text-theme-white"
+  class="bg-theme-black px-8 py-8 text-theme-white md:px-24 lg:px-32"
   aria-labelledby="faq-title"
 >
-  <div class="mx-auto flex w-full max-w-lg flex-col gap-8">
-    <header class="flex flex-col gap-5">
+  <div class="mx-auto flex w-full flex-col gap-8">
+    <header class="mx-auto flex w-full max-w-lg flex-col gap-5 md:max-w-2xl">
       <p class="kicker" data-scroll-fade>FAQ</p>
       <ScrollReveal
         client:visible
@@ -21,8 +21,8 @@ import { faqItems } from "../data/faq";
       />
     </header>
 
-    <div data-scroll-fade>
-      <FaqAccordion client:load items={faqItems} defaultOpenId="embarazo" />
+    <div class="mx-auto w-full max-w-lg md:max-w-2xl" data-scroll-fade>
+      <FaqAccordion client:load items={faqItems} />
     </div>
   </div>
 </section>
