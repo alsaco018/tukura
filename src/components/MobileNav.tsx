@@ -392,6 +392,27 @@ export const MobileNav = ({
       }
 
       const href = anchor.getAttribute("href");
+
+      // Hero arrow etc.: CSS scroll-padding + native smooth scroll.
+      if (anchor.hasAttribute("data-smooth-scroll")) {
+        const parsed = parseInternalHashLink(href ?? "");
+        if (parsed?.samePage) {
+          event.preventDefault();
+          const el = document.getElementById(parsed.hashId);
+          if (!el) return;
+          const nextHash = `#${parsed.hashId}`;
+          if (window.location.hash !== nextHash) {
+            history.pushState(
+              null,
+              "",
+              `${window.location.pathname}${window.location.search}${nextHash}`,
+            );
+          }
+          el.scrollIntoView({ behavior: "smooth", block: "start" });
+          return;
+        }
+      }
+
       if (!navigateFromHref(href)) return;
       event.preventDefault();
     };
