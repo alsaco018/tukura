@@ -3,20 +3,22 @@ import ScrollReveal from "./ScrollReveal";
 
 type ServiceScrollExpandProps = {
   image: string;
-  kicker: string;
+  imageAlt?: string;
+  imagePosition?: string;
   title: string;
 };
 
 const ServiceScrollExpand = ({
   image,
-  kicker,
+  imageAlt,
+  imagePosition,
   title,
 }: ServiceScrollExpandProps) => (
   <ScrollExpand
     src={image}
-    alt={title}
-    title={kicker}
+    alt={imageAlt ?? title}
     mediaType="image"
+    objectPositionClassName={imagePosition}
     useWindowScroll
     startWidth={48}
     startHeight={62}

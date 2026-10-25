@@ -12,7 +12,7 @@ export const site = {
     defaultTitle: "TUKURA | Masajes y bienestar en Jerez de la Frontera",
     defaultDescription:
       "Centro de masajes y bienestar en Jerez de la Frontera. Quiromasaje personalizado, ritual holístico, prenatal y Kobido facial con Patri Guillén en Centro Apófisis.",
-    ogImage: "/images/hero.png",
+    ogImage: "/images/hero/masaje-manos-muneca-tukura-jerez-bienestar.webp",
     locale: "es_ES",
     geo: {
       latitude: 36.678793,
@@ -39,6 +39,9 @@ export const site = {
       "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d791.8!2d-6.1289674!3d36.678793!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd0dc6ed46a3685f%3A0xe58d825844fc4d42!2sCentro%20Ap%C3%B3fisis%20Osteopat%C3%ADa%20y%20Terapias%20manuales%20%7C%20Jerez!5e0!3m2!1ses!2ses!4v1729000000000!5m2!1ses!2ses",
     kicker: "contacta con nosotros",
     title: "Pide cita y regálate una pausa",
+    image: "/images/contacto/manos-cuidado-masaje-tukura-jerez.webp",
+    imageAlt:
+      "Manos en un gesto de cuidado durante una sesión de masaje en TUKURA, centro de bienestar en Jerez de la Frontera",
   },
   social: [
     {
@@ -85,7 +88,9 @@ export const site = {
     name: "Patri Guillén",
     body: "Educadora Social y Quiromasajista. La persona que da vida a TUKURA y te acompañará en cada sesión. Durante los últimos años he acompañado a personas y familias en momentos vitales complejos. En ese camino nació mi curiosidad por comprender cómo todo lo que vivimos y sentimos también se expresa a través del cuerpo.",
     quote: "“Tu cuerpo también cuenta tu historia.”",
-    image: "/images/about.jpg",
+    image: "/images/about/patri-guillen-quiromasajista-tukura-jerez-masaje.webp",
+    imageAlt:
+      "Patri Guillén, quiromasajista de TUKURA, realizando un masaje en la sala de bienestar de Jerez de la Frontera",
     ctaLabel: "Leer más",
     ctaHref: "/quien-soy",
   },
@@ -114,9 +119,42 @@ export const site = {
       "Y, sobre todo, quiero que te sientas a gusto y con la confianza de expresar lo que necesitas. Puedes cambiar de postura, pedirme que ajuste la presión o que cambie la música. Si algo no te resulta cómodo, dímelo. Tu voz importa y quiero que sientas que tienes la libertad de compartir cómo estás en cada momento.",
     ],
     images: [
-      "/images/space-1.png",
-      "/images/space-2.png",
-      "/images/space-3.png",
+      {
+        src: "/images/espacio/sala-masajes-tukura-jerez-sala-completa.webp",
+        alt: "Vista general de la sala de masajes TUKURA en Jerez de la Frontera con camilla, luz suave y plantas",
+      },
+      {
+        src: "/images/espacio/sala-masajes-tukura-jerez-camilla-toallas-cojin.webp",
+        alt: "Camilla de masaje preparada con toallas melocotón y cojín floral en TUKURA, Jerez de la Frontera",
+      },
+      {
+        src: "/images/espacio/sala-masajes-tukura-jerez-preparacion-camilla.webp",
+        alt: "Preparación de la camilla de masajes con toallas suaves en el espacio TUKURA de Jerez",
+      },
+      {
+        src: "/images/espacio/sala-masajes-tukura-jerez-sillon-mimbre.webp",
+        alt: "Sillón de mimbre con cojín salmón en la sala de bienestar TUKURA en Jerez de la Frontera",
+      },
+      {
+        src: "/images/espacio/sala-masajes-tukura-jerez-espejo-ambiente.webp",
+        alt: "Reflejo en espejo de la sala de masajes TUKURA con sillón de mimbre y camilla en Jerez",
+      },
+      {
+        src: "/images/espacio/sala-masajes-tukura-jerez-lampara-sal-plantas.webp",
+        alt: "Rincón con lámpara de sal del Himalaya y plantas en la sala de masajes TUKURA en Jerez",
+      },
+      {
+        src: "/images/espacio/sala-masajes-tukura-jerez-carrito-productos.webp",
+        alt: "Carrito con productos de bienestar y planta en el centro de masajes TUKURA de Jerez",
+      },
+      {
+        src: "/images/espacio/sala-masajes-tukura-jerez-cuenco-tibetano-aceites.webp",
+        alt: "Estantería con cuenco tibetano, incienso y aceites esenciales en TUKURA, Jerez de la Frontera",
+      },
+      {
+        src: "/images/espacio/sala-masajes-tukura-jerez-tarjetas-presentacion.webp",
+        alt: "Tarjetas de presentación de TUKURA Masaje y Bienestar en el centro de Jerez de la Frontera",
+      },
     ],
   },
   products: {
@@ -133,7 +171,21 @@ export const site = {
       slides: [
         {
           title: "Tarjeta regalo TUKURA",
-          image: "/images/gift-slider.png",
+          image:
+            "/images/productos-especiales/tarjeta-regalo-tukura-jerez-bono-sesiones-tarjetas.webp",
+          alt: "Tarjeta regalo, bono de 5 sesiones y tarjetas de visita de TUKURA Masaje y Bienestar en Jerez de la Frontera",
+        },
+        {
+          title: "Mensaje de la tarjeta regalo",
+          image:
+            "/images/productos-especiales/tarjeta-regalo-tukura-jerez-interior-mensaje.webp",
+          alt: "Interior de la tarjeta regalo TUKURA con el mensaje Un regalo para parar, sentir y volver a ti, junto al bono de sesiones",
+        },
+        {
+          title: "Tarjeta de visita TUKURA",
+          image:
+            "/images/productos-especiales/tarjeta-regalo-tukura-jerez-tarjeta-visita-fucsia.webp",
+          alt: "Tarjeta de visita fucsia de TUKURA Masaje y Bienestar con logo de tortuga y papelería del centro en Jerez",
         },
       ],
       body: "En TUKURA puedes elegir uno de nuestros masajes o regalar el importe que prefieras, para que esa persona decida cuál le apetece más.",

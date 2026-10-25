@@ -41,8 +41,11 @@ export const ServicesStack = ({ services }: ServicesStackProps) => (
             <div className="relative aspect-[16/9] w-full shrink-0 overflow-hidden sm:aspect-[2/1]">
               <img
                 src={service.image}
-                alt=""
-                className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                alt={
+                  service.imageAlt ??
+                  `${service.title} — masaje en TUKURA Jerez`
+                }
+                className={`absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03] ${service.imagePosition ?? ""}`.trim()}
                 width={720}
                 height={405}
                 loading="lazy"

@@ -33,6 +33,8 @@ export interface ScrollExpandProps {
   mediaType?: 'image' | 'video';
   poster?: string;
   alt?: string;
+  /** Tailwind object-position utility applied to the media element */
+  objectPositionClassName?: string;
   title?: string;
   scrollHint?: string;
   startWidth?: number;
@@ -57,6 +59,7 @@ const ScrollExpand: React.FC<ScrollExpandProps> = ({
   mediaType = 'image',
   poster = '',
   alt = '',
+  objectPositionClassName = '',
   title = '',
   scrollHint = '',
   startWidth = 42,
@@ -237,11 +240,14 @@ const ScrollExpand: React.FC<ScrollExpandProps> = ({
     };
   }, [applyProgress, useWindowScroll]);
 
+  const mediaClassName =
+    `absolute inset-0 z-0 h-full w-full origin-center object-cover select-none [will-change:transform] ${objectPositionClassName}`.trim();
+
   const media =
     mediaType === 'video' ? (
       <video
         ref={mediaRef}
-        className="absolute inset-0 z-0 h-full w-full origin-center object-cover select-none [will-change:transform]"
+        className={mediaClassName}
         src={src}
         poster={poster}
         autoPlay
@@ -252,7 +258,7 @@ const ScrollExpand: React.FC<ScrollExpandProps> = ({
     ) : (
       <img
         ref={mediaRef}
-        className="absolute inset-0 z-0 h-full w-full origin-center object-cover select-none [will-change:transform]"
+        className={mediaClassName}
         src={src}
         alt={alt}
         draggable={false}

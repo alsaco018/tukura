@@ -8,6 +8,9 @@ export type Service = {
   price: string;
   duration: string;
   image: string;
+  imageAlt?: string;
+  /** Tailwind object-position utility, e.g. "object-[center_72%]" */
+  imagePosition?: string;
 };
 
 export const services: Service[] = [
@@ -25,7 +28,9 @@ export const services: Service[] = [
     ],
     price: "45€",
     duration: "60 min",
-    image: "/images/service-personalizado.png",
+    image: "/images/personalizado/masaje-personalizado-tukura-jerez.webp",
+    imageAlt:
+      "Masaje personalizado en espalda y zona lumbar realizado a un cliente en la sala de TUKURA, centro de masajes en Jerez de la Frontera",
   },
   {
     id: "ritual",
@@ -41,7 +46,10 @@ export const services: Service[] = [
     ],
     price: "55€",
     duration: "75 min",
-    image: "/images/service-ritual.png",
+    image: "/images/holistico/masaje-ritual-holistico-tukura-jerez.webp",
+    imageAlt:
+      "Manos de Patri Guillén realizando el ritual corporal holístico a un cliente en la sala de TUKURA, centro de masajes en Jerez de la Frontera",
+    imagePosition: "object-bottom",
   },
   {
     id: "vertebral",
@@ -57,7 +65,9 @@ export const services: Service[] = [
     ],
     price: "45€",
     duration: "60 min",
-    image: "/images/service-vertebral.png",
+    image: "/images/vertebral/masaje-vertebral-tukura-jerez.webp",
+    imageAlt:
+      "Masaje vertebral en la columna y espalda realizado a un cliente en la sala de TUKURA, centro de masajes en Jerez de la Frontera",
   },
   {
     id: "craneofacial",
@@ -73,7 +83,9 @@ export const services: Service[] = [
     ],
     price: "45€",
     duration: "60 min",
-    image: "/images/service-craneofacial.png",
+    image: "/images/craneofacial/masaje-craneofacial-tukura-jerez.webp",
+    imageAlt:
+      "Masaje craneofacial en cuello y cabeza realizado a un cliente en la sala de TUKURA, centro de masajes en Jerez de la Frontera",
   },
   {
     id: "kobido",
@@ -89,7 +101,9 @@ export const services: Service[] = [
     ],
     price: "45€",
     duration: "60 min",
-    image: "/images/service-kobido.png",
+    image: "/images/kobido/masaje-kobido-facial-tukura-jerez.webp",
+    imageAlt:
+      "Masaje Kobido facial japonés realizado por Patri Guillén a una clienta en la sala de TUKURA, centro de masajes en Jerez de la Frontera",
   },
   {
     id: "prenatal",
@@ -104,7 +118,9 @@ export const services: Service[] = [
     ],
     price: "45€",
     duration: "60 min",
-    image: "/images/service-prenatal.png",
+    image: "/images/prenatal/masaje-prenatal-tukura-jerez.webp",
+    imageAlt:
+      "Masaje prenatal en piernas y pantorrilla realizado a una clienta embarazada en la sala de TUKURA, centro de masajes en Jerez de la Frontera",
   },
 ];
 

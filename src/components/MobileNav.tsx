@@ -124,12 +124,25 @@ const unlockBodyScroll = (): number => {
   return y;
 };
 
+type ScrollWindowOptions = {
+  /** Force eased scroll even on mobile/tablet (hero arrow, etc.). */
+  smooth?: boolean;
+};
+
 /**
  * Desktop: eased rAF scroll. Mobile/tablet nav: instant jump with
  * scroll-behavior: auto so fade/scrub keep working during normal scroll.
+ * Pass `{ smooth: true }` to always animate (e.g. hero down-arrow).
  */
-const scrollWindowTo = (top: number, onDone?: () => void): (() => void) => {
-  if (isMobileOrTablet()) {
+const scrollWindowTo = (
+  top: number,
+  onDone?: () => void,
+  options: ScrollWindowOptions = {},
+): (() => void) => {
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const preferInstant = isMobileOrTablet() && !options.smooth;
+
+  if (preferInstant) {
     withNavHashScrolling(() => {
       window.scrollTo({ top, behavior: "instant" });
     });
@@ -137,12 +150,13 @@ const scrollWindowTo = (top: number, onDone?: () => void): (() => void) => {
     return () => undefined;
   }
 
-  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const start = window.scrollY;
   const distance = top - start;
 
   if (reduced || Math.abs(distance) < 2) {
-    window.scrollTo({ top, behavior: "instant" });
+    withNavHashScrolling(() => {
+      window.scrollTo({ top, behavior: "instant" });
+    });
     onDone?.();
     return () => undefined;
   }
@@ -205,40 +219,50 @@ export const MobileNav = ({
     }
   };
 
-  const scrollToSection = useCallback((targetId: string, attempt = 0) => {
-    const el = document.getElementById(targetId);
-    if (!el) {
-      if (attempt < 24) {
-        window.setTimeout(() => scrollToSection(targetId, attempt + 1), 50);
+  const scrollToSection = useCallback(
+    (targetId: string, attempt = 0, options: ScrollWindowOptions = {}) => {
+      const el = document.getElementById(targetId);
+      if (!el) {
+        if (attempt < 24) {
+          window.setTimeout(
+            () => scrollToSection(targetId, attempt + 1, options),
+            50,
+          );
+        }
+        return;
       }
-      return;
-    }
 
-    const nextHash = `#${targetId}`;
-    if (window.location.hash !== nextHash) {
-      history.pushState(
-        null,
-        "",
-        `${window.location.pathname}${window.location.search}${nextHash}`,
+      const nextHash = `#${targetId}`;
+      if (window.location.hash !== nextHash) {
+        history.pushState(
+          null,
+          "",
+          `${window.location.pathname}${window.location.search}${nextHash}`,
+        );
+      }
+
+      const padding = getScrollPaddingTop();
+      const top = Math.max(0, getDocumentTop(el) - padding);
+      const gen = ++scrollGenRef.current;
+
+      cancelScrollRef.current?.();
+      cancelScrollRef.current = scrollWindowTo(
+        top,
+        () => {
+          if (gen !== scrollGenRef.current) return;
+          const settled = Math.max(0, getDocumentTop(el) - padding);
+          if (Math.abs(window.scrollY - settled) > 8) {
+            withNavHashScrolling(() => {
+              window.scrollTo({ top: settled, behavior: "instant" });
+            });
+          }
+          cancelScrollRef.current = null;
+        },
+        options,
       );
-    }
-
-    const padding = getScrollPaddingTop();
-    const top = Math.max(0, getDocumentTop(el) - padding);
-    const gen = ++scrollGenRef.current;
-
-    cancelScrollRef.current?.();
-    cancelScrollRef.current = scrollWindowTo(top, () => {
-      if (gen !== scrollGenRef.current) return;
-      const settled = Math.max(0, getDocumentTop(el) - padding);
-      if (Math.abs(window.scrollY - settled) > 8) {
-        withNavHashScrolling(() => {
-          window.scrollTo({ top: settled, behavior: "instant" });
-        });
-      }
-      cancelScrollRef.current = null;
-    });
-  }, []);
+    },
+    [],
+  );
 
   const closeOrScrollTo = useCallback(
     (targetId: string) => {
@@ -393,22 +417,13 @@ export const MobileNav = ({
 
       const href = anchor.getAttribute("href");
 
-      // Hero arrow etc.: CSS scroll-padding + native smooth scroll.
+      // Hero arrow: offset-aware eased scroll (scrollIntoView often stops short).
       if (anchor.hasAttribute("data-smooth-scroll")) {
         const parsed = parseInternalHashLink(href ?? "");
         if (parsed?.samePage) {
           event.preventDefault();
-          const el = document.getElementById(parsed.hashId);
-          if (!el) return;
-          const nextHash = `#${parsed.hashId}`;
-          if (window.location.hash !== nextHash) {
-            history.pushState(
-              null,
-              "",
-              `${window.location.pathname}${window.location.search}${nextHash}`,
-            );
-          }
-          el.scrollIntoView({ behavior: "smooth", block: "start" });
+          unlockBodyScroll();
+          scrollToSection(parsed.hashId, 0, { smooth: true });
           return;
         }
       }
@@ -419,7 +434,7 @@ export const MobileNav = ({
 
     document.addEventListener("click", onDocumentClick);
     return () => document.removeEventListener("click", onDocumentClick);
-  }, [navigateFromHref]);
+  }, [navigateFromHref, scrollToSection]);
 
   useEffect(
     () => () => {

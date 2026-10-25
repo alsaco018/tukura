@@ -3,6 +3,7 @@ import DepthCarousel, { CARD_RADIUS } from "./DepthCarousel";
 type GiftSlide = {
   title: string;
   image: string;
+  alt?: string;
 };
 
 type GiftSliderProps = {
@@ -16,7 +17,7 @@ export const GiftSlider = ({ slides }: GiftSliderProps) => {
 
   const items = slides.map((item) => ({
     image: item.image,
-    alt: item.title,
+    alt: item.alt ?? item.title,
   }));
 
   const hasMultipleSlides = slides.length > 1;

@@ -1,8 +1,13 @@
 import { useEffect, useState } from "react";
 import DepthCarousel, { CARD_RADIUS } from "./DepthCarousel";
 
+export type SpaceGalleryImage = {
+  src: string;
+  alt: string;
+};
+
 type SpaceGalleryProps = {
-  images: readonly string[];
+  images: readonly SpaceGalleryImage[];
 };
 
 type GallerySize = {
@@ -43,9 +48,9 @@ export const SpaceGallery = ({ images }: SpaceGalleryProps) => {
     return () => media.removeEventListener("change", sync);
   }, []);
 
-  const items = images.map((image, index) => ({
-    image,
-    alt: `Sala de masajes TUKURA en Jerez de la Frontera (${index + 1})`,
+  const items = images.map(({ src, alt }) => ({
+    image: src,
+    alt,
   }));
 
   return (
@@ -64,7 +69,7 @@ export const SpaceGallery = ({ images }: SpaceGalleryProps) => {
         loop
         showControls
         showIndicators
-        ariaLabel="Galería del espacio"
+        ariaLabel="Galería del espacio de masajes TUKURA en Jerez de la Frontera"
         className="min-h-0"
       />
     </div>

@@ -18,11 +18,13 @@ const { contact } = site;
 
   >
     <img
-      src="/images/booking-hero.jpg"
-      alt=""
-      class="absolute inset-0 h-full w-full object-cover object-[center_35%]"
-      width="540"
-      height="722"
+      src={contact.image}
+      alt={contact.imageAlt}
+      class="absolute inset-0 h-full w-full object-cover object-[center_52%]"
+      width="1600"
+      height="1200"
+      loading="lazy"
+      decoding="async"
     />
     <div class="absolute inset-0 bg-theme-black/15" aria-hidden="true"></div>
     <img

@@ -41,13 +41,13 @@ const { about } = site;
     <Button href={about.ctaHref} label={about.ctaLabel} variant="secondary" scrollFade />
   </div>
 
-  <div class="mt-6 h-[353px] w-full overflow-hidden" data-scroll-fade>
+  <div class="mt-6 h-[520px] w-full overflow-hidden md:h-[640px] lg:h-[720px]" data-scroll-fade>
     <img
       src={about.image}
-      alt="Patri Guillén en un ambiente de bienestar"
-      class="h-full w-full object-cover"
-      width="786"
-      height="706"
+      alt={about.imageAlt}
+      class="h-full w-full object-cover object-[center_28%]"
+      width="1600"
+      height="2145"
       loading="lazy"
     />
   </div>

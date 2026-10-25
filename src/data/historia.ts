@@ -2,7 +2,7 @@ export const historia = {
   kicker: "nuestra historia",
   title: "Tu cuerpo es tu hogar",
   turtle: "/icons/turtle.svg",
-  heroImage: "/images/about.jpg",
+  heroImage: "/images/about/patri-guillen-quiromasajista-tukura-jerez-masaje.webp",
   paragraphs: [
     "TUKURA nace del deseo de crear espacios y momentos más amables y seguros. Lugares donde no tengamos que llegar con todo resuelto, donde podamos parar y descansar.",
     "Su nombre surge de un juego entre kura-kura, que significa «tortuga» en indonesio, y curar, entendido desde su sentido más amable: cuidar. Ese cuidado que nos recuerda a la infancia, al cariño y a aquel «sana, sana, culito de rana».",
@@ -35,6 +35,8 @@ export const historia = {
         "Educación Social · Quiromasaje · Masaje vertebral y sistema nervioso autónomo · Kobido · Facilitadora Kundalini Energía Vital.",
       note: "Y sigo aprendiendo, porque cuidar también es una forma de crecer.",
     },
-    image: "/images/about.jpg",
+    image: "/images/about/patri-guillen-quiromasajista-tukura-jerez-masaje.webp",
+    imageAlt:
+      "Patri Guillén, quiromasajista de TUKURA, realizando un masaje en la sala de bienestar de Jerez de la Frontera",
   },
 } as const;
