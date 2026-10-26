@@ -14,6 +14,8 @@ interface Props {
   noindex?: boolean;
   type?: "website" | "article";
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+  /** Above-the-fold LCP image to preload (homepage hero). */
+  preloadLcpImage?: string;
 }
 
 const {
@@ -24,6 +26,7 @@ const {
   noindex = false,
   type = "website",
   jsonLd,
+  preloadLcpImage,
 } = Astro.props;
 
 const normalizedPath =
@@ -55,6 +58,39 @@ const jsonLdItems = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="alternate" hreflang="es" href={canonicalUrl} />
     <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap-index.xml" />
+
+    <link
+      rel="preload"
+      href="/fonts/Poppins-Regular.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/Poppins-SemiBold.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/TAN-PARADISO-Regular.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    {
+      preloadLcpImage && (
+        <link
+          rel="preload"
+          as="image"
+          href={preloadLcpImage}
+          type="image/webp"
+          fetchpriority="high"
+        />
+      )
+    }
 
     <meta property="og:type" content={type} />
     <meta property="og:locale" content={site.seo.locale} />
@@ -88,8 +124,8 @@ const jsonLdItems = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
       Saltar al contenido
     </a>
     <slot />
-    <CookieConsentInit client:load />
-    <PageScrollFade client:load />
-    <PageClickSpark client:load />
+    <CookieConsentInit client:idle />
+    <PageScrollFade client:idle />
+    <PageClickSpark client:idle />
   </body>
 </html>

@@ -16,6 +16,9 @@ export default defineConfig({
   redirects: {
     "/inicio": "/",
   },
+  build: {
+    inlineStylesheets: "always",
+  },
   server: {
     host: true,
     port: 4322,

@@ -495,6 +495,8 @@ const DepthCarousel = ({
                     src={item.image}
                     alt={item.alt || ''}
                     draggable={false}
+                    loading="lazy"
+                    decoding="async"
                   />
                 ) : null}
                 <span

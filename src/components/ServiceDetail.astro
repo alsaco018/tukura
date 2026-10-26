@@ -14,7 +14,7 @@ const { service } = Astro.props;
 
 <article class="bg-brand-light">
   <ServiceScrollExpand
-    client:load
+    client:idle
     image={service.image}
     imageAlt={service.imageAlt}
     imagePosition={service.imagePosition}
@@ -43,7 +43,7 @@ const { service } = Astro.props;
     </div>
 
     <div class="w-full" data-scroll-fade>
-      <BookingForm client:load preselectedServiceId={service.id} />
+      <BookingForm client:visible preselectedServiceId={service.id} />
     </div>
   </div>
 </article>
