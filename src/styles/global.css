@@ -77,6 +77,7 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 5rem;
+  overflow-x: clip;
 }
 
 /* Forced by MobileNav during hash jumps on mobile/tablet only */
@@ -101,6 +102,7 @@ html.nav-hash-scrolling {
 body {
   margin: 0;
   min-height: 100dvh;
+  overflow-x: clip;
   font-family: var(--font-sans);
   background-color: var(--color-brand-light);
   color: var(--color-theme-black);

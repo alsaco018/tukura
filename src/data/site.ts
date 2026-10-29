@@ -12,7 +12,7 @@ export const site = {
     defaultTitle: "TUKURA | Masajes y bienestar en Jerez de la Frontera",
     defaultDescription:
       "Centro de masajes y bienestar en Jerez de la Frontera. Quiromasaje personalizado, ritual holístico, prenatal y Kobido facial con Patri Guillén en Centro Apófisis.",
-    ogImage: "/images/hero/masaje-manos-muneca-tukura-jerez-bienestar.webp",
+    ogImage: "/images/hero/masaje-espalda-palmas-tukura-jerez-bienestar-poster.webp",
     locale: "es_ES",
     geo: {
       latitude: 36.678793,

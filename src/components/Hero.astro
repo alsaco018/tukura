@@ -21,25 +21,118 @@ const {
   displayWord = site.displayWord,
   description = site.heroDescription,
 } = Astro.props;
+
+const heroVideoBase = "/videos/masaje-espalda-palmas-tukura-jerez-bienestar";
+const heroPoster =
+  "/images/hero/masaje-espalda-palmas-tukura-jerez-bienestar-poster.webp";
+const heroMediaLabel =
+  "Masaje terapéutico de espalda con las palmas de las manos en TUKURA, centro de masajes y bienestar en Jerez de la Frontera";
 ---
 
 <section
   class="relative flex min-h-[92dvh] w-full flex-col items-center overflow-hidden rounded-b-[999px] md:min-h-dvh"
   aria-label="Inicio"
 >
+  {/* Poster first: same LCP role as the previous hero image, no network contention with JS islands */}
   <img
-    src="/images/hero/masaje-manos-muneca-tukura-jerez-bienestar-1200.webp"
-    srcset="/images/hero/masaje-manos-muneca-tukura-jerez-bienestar-800.webp 800w, /images/hero/masaje-manos-muneca-tukura-jerez-bienestar-1200.webp 1200w, /images/hero/masaje-manos-muneca-tukura-jerez-bienestar.webp 1800w"
-    sizes="100vw"
-    alt="Masaje terapéutico de manos y muñeca en TUKURA, centro de masajes y bienestar en Jerez de la Frontera"
+    src={heroPoster}
+    alt={heroMediaLabel}
     class="absolute inset-0 h-full w-full object-cover"
-    width="1200"
-    height="1599"
+    width="1080"
+    height="1920"
     fetchpriority="high"
     decoding="async"
+    data-hero-poster
   />
+
+  {/* Sources are injected after idle so decode/download never block ScrollReveal / PageScrollFade */}
+  <video
+    class="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-700 ease-out motion-reduce:transition-none"
+    muted
+    loop
+    playsinline
+    preload="none"
+    poster={heroPoster}
+    width="1080"
+    height="1920"
+    aria-hidden="true"
+    data-hero-video
+    data-src-webm-desktop={`${heroVideoBase}.webm`}
+    data-src-mp4-desktop={`${heroVideoBase}.mp4`}
+    data-src-webm-mobile={`${heroVideoBase}-720.webm`}
+    data-src-mp4-mobile={`${heroVideoBase}-720.mp4`}
+  ></video>
+  <script is:inline>
+    (() => {
+      const video = document.querySelector("[data-hero-video]");
+      if (!(video instanceof HTMLVideoElement)) return;
+
+      const prefersReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+      if (prefersReducedMotion) return;
+
+      const connection =
+        navigator.connection ||
+        navigator.mozConnection ||
+        navigator.webkitConnection;
+      if (connection?.saveData) return;
+      if (/(^|-)2g$/i.test(connection?.effectiveType || "")) return;
+
+      let started = false;
+
+      const revealVideo = () => {
+        video.classList.remove("opacity-0");
+        video.classList.add("opacity-100");
+        const poster = document.querySelector("[data-hero-poster]");
+        if (poster instanceof HTMLElement) {
+          poster.setAttribute("aria-hidden", "true");
+        }
+      };
+
+      const startHeroVideo = () => {
+        if (started) return;
+        started = true;
+
+        const useMobile = window.matchMedia("(max-width: 767px)").matches;
+        const webm = video.dataset[useMobile ? "srcWebmMobile" : "srcWebmDesktop"];
+        const mp4 = video.dataset[useMobile ? "srcMp4Mobile" : "srcMp4Desktop"];
+        if (!webm || !mp4) return;
+
+        const webmSource = document.createElement("source");
+        webmSource.src = webm;
+        webmSource.type = "video/webm";
+
+        const mp4Source = document.createElement("source");
+        mp4Source.src = mp4;
+        mp4Source.type = "video/mp4";
+
+        video.append(webmSource, mp4Source);
+        video.load();
+
+        const tryPlay = () => {
+          video.play().then(revealVideo).catch(() => {});
+        };
+
+        if (video.readyState >= 2) tryPlay();
+        else video.addEventListener("loadeddata", tryPlay, { once: true });
+      };
+
+      const scheduleStart = () => {
+        if ("requestIdleCallback" in window) {
+          window.requestIdleCallback(startHeroVideo, { timeout: 2200 });
+        } else {
+          window.setTimeout(startHeroVideo, 600);
+        }
+      };
+
+      if (document.readyState === "complete") scheduleStart();
+      else window.addEventListener("load", scheduleStart, { once: true });
+    })();
+  </script>
+
   <div
-    class="absolute inset-0 bg-gradient-to-t from-theme-black/75 via-theme-black/40 to-theme-black/20"
+    class="absolute inset-0 bg-gradient-to-t from-theme-black/70 via-theme-black/25 to-transparent"
     aria-hidden="true"
   ></div>
 
