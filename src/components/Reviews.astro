@@ -21,7 +21,8 @@ import { reviews } from "../data/reviews";
       />
     </header>
 
-    <div data-scroll-fade>
+    {/* No data-scroll-fade: opacity compositing clips DepthCarousel card shadows */}
+    <div>
       <ReviewsSlider client:visible reviews={reviews} />
     </div>
   </div>

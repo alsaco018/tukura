@@ -26,6 +26,10 @@ type TiltDirection = 'left' | 'right';
 /** Uniform corner radius for all carousel cards */
 export const CARD_RADIUS = '40px';
 
+/** Soft drop shadow — keep blur modest so parents do not need huge bleed */
+export const CARD_SHADOW =
+  'shadow-[0_18px_36px_-18px_rgba(0,0,0,0.55),0_6px_14px_-8px_rgba(0,0,0,0.4)]';
+
 export interface DepthCarouselProps {
   items?: DepthCarouselItem[];
   cardWidth?: number;
@@ -456,7 +460,7 @@ const DepthCarousel = ({
   return (
     <div
       ref={rootRef}
-      className={`relative flex h-full min-h-[320px] w-full cursor-grab touch-pan-y select-none items-center justify-center overflow-hidden outline-none [perspective-origin:50%_50%] active:cursor-grabbing focus-visible:rounded-xl focus-visible:outline-2 focus-visible:outline-white/50 focus-visible:[outline-offset:4px] ${className}`.trim()}
+      className={`relative flex h-full min-h-[320px] w-full cursor-grab touch-pan-y select-none items-center justify-center overflow-visible outline-none [perspective-origin:50%_50%] active:cursor-grabbing focus-visible:rounded-xl focus-visible:outline-2 focus-visible:outline-white/50 focus-visible:[outline-offset:4px] ${className}`.trim()}
       style={{ perspective: `${perspective}px` }}
       role="group"
       aria-roledescription="carousel"
@@ -473,8 +477,7 @@ const DepthCarousel = ({
           <div
             key={i}
             className={`absolute left-1/2 top-1/2 cursor-pointer overflow-hidden [transform:translate(-50%,-50%)] [transform-origin:center] [will-change:transform,opacity,filter] ${
-              cardClassName ||
-              'bg-[#0b0d12] shadow-[0_30px_60px_-20px_rgba(0,0,0,0.65),0_8px_20px_-10px_rgba(0,0,0,0.5)]'
+              cardClassName || `bg-[#0b0d12] ${CARD_SHADOW}`
             }`}
             ref={el => {
               cardRefs.current[i] = el;

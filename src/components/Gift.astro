@@ -11,7 +11,7 @@ const { gift, voucher } = products;
 
 <section
   id="productos"
-  class="relative overflow-hidden bg-theme-black px-5 py-10"
+  class="relative bg-theme-black px-5 py-10"
   aria-labelledby="productos-title"
 >
   <div class="mx-auto flex w-full max-w-lg flex-col gap-12 md:max-w-2xl">
@@ -53,7 +53,8 @@ const { gift, voucher } = products;
         </div>
       </div>
 
-      <div class="w-full" data-scroll-fade>
+      {/* No data-scroll-fade: opacity compositing clips DepthCarousel card shadows */}
+      <div class="w-full">
         <GiftSlider client:visible slides={gift.slides} />
       </div>
 

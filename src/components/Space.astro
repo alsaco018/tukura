@@ -8,7 +8,7 @@ const { space } = site;
 
 <section
   id="espacio"
-  class="relative overflow-hidden bg-brand-light px-5 py-10"
+  class="relative bg-brand-light px-5 py-10"
   aria-labelledby="espacio-title"
 >
   <div class="relative mx-auto flex w-full max-w-lg flex-col gap-8 md:max-w-2xl">
@@ -35,7 +35,8 @@ const { space } = site;
       </div>
     </div>
 
-    <div data-scroll-fade class="w-full">
+    {/* No data-scroll-fade: opacity compositing clips DepthCarousel card shadows */}
+    <div class="w-full">
       <SpaceGallery client:visible images={space.images} />
     </div>
   </div>

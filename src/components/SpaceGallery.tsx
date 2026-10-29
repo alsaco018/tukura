@@ -19,17 +19,17 @@ type GallerySize = {
 };
 
 const MOBILE_SIZE: GallerySize = {
-  cardWidth: 460,
-  cardHeight: 340,
-  heightClass: "h-[320px]",
+  cardWidth: 420,
+  cardHeight: 300,
+  heightClass: "h-[300px]",
   depth: 160,
   spread: 56,
 };
 
 const DESKTOP_SIZE: GallerySize = {
-  cardWidth: 640,
-  cardHeight: 470,
-  heightClass: "h-[320px] md:h-[520px]",
+  cardWidth: 600,
+  cardHeight: 440,
+  heightClass: "h-[300px] md:h-[480px]",
   depth: 200,
   spread: 72,
 };
@@ -54,24 +54,26 @@ export const SpaceGallery = ({ images }: SpaceGalleryProps) => {
   }));
 
   return (
-    <div className={`w-full ${size.heightClass}`}>
-      <DepthCarousel
-        items={items}
-        cardWidth={size.cardWidth}
-        cardHeight={size.cardHeight}
-        radius={CARD_RADIUS}
-        tint="#4d3114"
-        depth={size.depth}
-        spread={size.spread}
-        visibleCards={3}
-        autoplay
-        autoplayDelay={5000}
-        loop
-        showControls
-        showIndicators
-        ariaLabel="Galería del espacio de masajes TUKURA en Jerez de la Frontera"
-        className="min-h-0"
-      />
+    <div className="w-full overflow-visible px-2 py-6 sm:px-3 sm:py-8">
+      <div className={`w-full overflow-visible ${size.heightClass}`}>
+        <DepthCarousel
+          items={items}
+          cardWidth={size.cardWidth}
+          cardHeight={size.cardHeight}
+          radius={CARD_RADIUS}
+          tint="#4d3114"
+          depth={size.depth}
+          spread={size.spread}
+          visibleCards={3}
+          autoplay
+          autoplayDelay={5000}
+          loop
+          showControls
+          showIndicators
+          ariaLabel="Galería del espacio de masajes TUKURA en Jerez de la Frontera"
+          className="min-h-0"
+        />
+      </div>
     </div>
   );
 };
